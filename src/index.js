@@ -1,84 +1,117 @@
-const [canvas] = document.getElementByTagName('canvas')
+const [canvas] = document.getElementsByTagName('canvas')
 const context = canvas.getContext('2d')
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 
 const controls = getControls()
-
 const player = {
-  x: width / 2,
-  y: height / 2,
+  x: canvas.width / 2,
+  y: canvas.height / 2,
   width: 25,
   height: 25,
   speed: 3,
-  velocity: { x: 0, y: 0 },
+  velocity: {
+    x: 0,
+    y: 0
+  },
   isJumping: false,
   onGround: false,
   draw() {
     context.fillStyle = 'lightgreen'
-    context.rect(this.x, this.y, this.width, this.height)
+    context.fillRect(this.x, this.y, this.width, this.height)
   }
 }
+const obstacles = [
+  obstacle(0, window.innerHeight - 20, window.innerWidth, 20, '#212121'),
+  obstacle(window.innerWidth / 3, window.innerHeight - 130, window.innerWidth, 20, '#212121'),
+  obstacle(window.innerWidth / 4, window.innerHeight - 90, window.innerWidth, 20, '#212121'),
+]
 
+function loop() {
+  // Clear drawing
+  context.clearRect(0, 0, canvas.width, canvas.height)
 
-function draw() {
-  context.clearRect(0, 0, width, height)
-  context.beginPath()
-  obstacles.forEach(o => o.draw())
-  player.draw()
-}
+  // Draw background
+  context.globalAlpha = 1
+  context.fillStyle = `#121212`
+  context.fillRect(0, 0, canvas.width, canvas.height)
 
-
-function update() {
-    // Update player from controls
-    if (controls.jump && !player.isJumping && player.onGround) {
-        player.isJumping = true
-        player.velocity.y = -player.speed * 2.5 // jump height
-    }
-    if (controls.right && player.velocity.x < player.speed) player.velocity.x++
-    if (controls.left && player.velocity.x > -player.speed) player.velocity.x--
-
-    // Apply environment settings
-    player.velocity.x *= 0.8 // friction
-    player.velocity.y += 0.4 // gravity
+  // Update player from controls
+  if (controls.jump && (!player.isJumping && player.onGround)) {
+    player.isJumping = true
     player.onGround = false
+    player.velocity.y = -player.speed * 2.5 // jump height
+  }
+  if (controls.right && (player.velocity.x < player.speed)) player.velocity.x++
+  if (controls.left && (player.velocity.x > -player.speed)) player.velocity.x--
 
-    // Check for a collision with an obstacle
-    const collision = obstacles.forEach(o => o.collides(player))
-    if (collision === 'left' || collision === 'right') {
-        player.velocity.x = 0
-        player.isJumping = false
-    } else if (collision === 'bottom') {
-        player.onGround = true
-        player.isJumping = false
-    } else if (collision === 'top') {
-        player.velocity.y *= -1
+  // Apply environment settings
+  player.velocity.x *= 0.8 // friction
+  player.velocity.y += 0.3 // gravity
+  player.onGround = false
+
+  // Check for a collision with an obstacle
+  obstacles.forEach(obstacle => {
+    const [direction, adjustment] = obstacle.collides(player)
+    if (direction === 'left' || direction === 'right') {
+      player.velocity.x = 0
+      player.isJumping = false
+      player.x += adjustment
+    } else if (direction === 'bottom') {
+      player.onGround = true
+      player.isJumping = false
+      player.y += adjustment
+    } else if (direction === 'top') {
+      player.velocity.y *= -1
+      player.y += adjustment
     }
+    obstacle.draw()
+  })
 
-    // Apply player velocity to position
-    if (player.onGround) player.velocity.y = 0
-    player.x += player.velocity.x
-    player.y += player.velocity.y
 
-    // TODO: Test for collision with enemies and kill player
-    // TODO: Test for collision with battery-packs and reset lighting
+
+
+  // Apply player velocity to position
+  if (player.onGround) player.velocity.y = 0
+  player.x += player.velocity.x
+  player.y += player.velocity.y
+  player.draw()
+
+
+  // TODO: Test for collision with enemies and kill player
+  // TODO: Test for collision with battery-packs and reset lighting
+
+  requestAnimationFrame(loop)
 }
 
 function obstacle(x, y, width, height, color) {
   return {
-    x, y, width, height, color,
+    x,
+    y,
+    width,
+    height,
+    color,
     collides(player) {
-      return checkCollision(this, player)
-    }
+      return checkCollision(player, this)
+    },
     draw() {
       context.fillStyle = color
-      context.rect(x, y, width, height)
+      context.fillRect(x, y, width, height)
     }
   }
+}
 
 function getControls() {
-  const keys = { jump: [38, 32, 87], right: [39, 68], left: [37, 65] }
-  const controls = { jump: false, right: false, left: false }
+  const keys = {
+    jump: [38, 32, 87],
+    right: [39, 68],
+    left: [37, 65]
+  }
+  const controls = {
+    jump: false,
+    right: false,
+    left: false
+  }
   const setControl = flag => {
     Object.keys(controls).forEach(control => {
       if (keys[control].indexOf(event.keyCode) > -1) controls[control] = flag
@@ -89,78 +122,32 @@ function getControls() {
   return controls
 }
 
-
 function checkCollision(a, b) {
-  // If there is a collision, return the side the collision happened
-  if (!(
-        ((a.y + a.height) < (b.y)) ||
-        (a.y > (b.y + b.height)) ||
-        ((a.x + a.width) < b.x) ||
-        (a.x > (b.x + b.width))
-    )) {
-     const bottom = (b.y + b.height) - a.y
-     const top = (a.y + a.height) - b.y
-     const left = (a.x + a.width) - b.x
-     const right = (b.x + b.width) - a.x
+  const vec = [
+    (a.x + (a.width / 2)) - (b.x + (b.width / 2)),
+    (a.y + (a.height / 2)) - (b.y + (b.height / 2)),
+  ]
+  const overlap = [
+    (a.width / 2) + (b.width / 2),
+    (a.height / 2) + (b.height / 2),
+  ]
 
-     if (top < bottom && top < left && top < right ) return 'top'
-     if (bottom < top && bottom < left && bottom < right) return 'bottom'
-     if (left < right && left < top && left < bottom) return 'left'
-     if (right < left && right < top && right < bottom ) return 'right'
-     if (left === right || top === bottom) return 'inside'
+  if (Math.abs(vec[0]) < overlap[0] && Math.abs(vec[1]) < overlap[1]) {
+    const oDiff = [
+      overlap[0] - Math.abs(vec[0]),
+      overlap[1] - Math.abs(vec[1]),
+    ]
+    if (oDiff[0] >= oDiff[1]) {
+      if (vec[1] > 0) return ['top', oDiff[1]]
+      else return ['bottom', -oDiff[1]]
+    } else {
+      if (vec[0] > 0) return ['left', oDiff[0]]
+      else return ['right', -oDiff[0]]
+    }
   }
-  return false
+  return [null, null]
 }
 
 
-
-
-    // //draw powerup stuff
-    // for(var j = 0; j < powerup.length; j++){
-    //   context.save();
-    //   var cx = powerup[j].x + 0.5 * powerup[j].width,   // x of shape center
-    //   cy = powerup[j].y + 0.5 * powerup[j].height; //y of shape center
-    //   context.translate(cx, cy);  //translate to center of shape
-    //   context.rotate( (Math.PI / 180) * 45);//rotate 25 degrees.
-    //   if(powerup[j].effect  === 'tele'){
-    //     context.rotate( (Math.PI / 180) * powerup[j].rotate);//rotate 25 degrees.
-    //     powerup[j].rotate = (Math.PI / 180) * powerup[j].rotate;
-    //   }
-    //   context.translate(-cx, -cy);            //translate center back to 0,0
-    //   context.fillStyle = powerup[j].color;
-    //   context.fillRect(powerup[j].x, powerup[j].y, powerup[j].width, powerup[j].height);
-    //   context.restore();
-    //
-    //   // //powerup collision
-    //   // if(colCheck(player, powerup[j])!==null){//touched power up!
-    //   //   if(powerup[j].effect==='gravity'){
-    //   //     gravity= 0.4;//decrease gravity
-    //   //     player.speed = 4;
-    //   //     player.color = 'white';
-    //   //   }
-    //   //   else if (powerup[j].effect==='shrink'){
-    //   //     player.width= 10;
-    //   //     player.height= 10;
-    //   //     player.speed = 5;
-    //   //   }
-    //   //   else if (powerup[j].effect==='tele'){
-    //   //     player.x=powerup[j].px;
-    //   //     player.y=powerup[j].py;
-    //   //   }
-    //   //   else if (powerup[j].effect==='win'){
-    //   //     var r = confirm("You win! Play again?");
-    //   //     if (r == false) {
-    //   //          player.x=200;
-    //   //          player.y=200;
-    //   //     } else {
-    //   //          window.location.href = window.location.href;
-    //   //     }
-    //   //   }
-    //   //   if(powerup[j].stay!==true)
-    //   //   powerup[j].width=0;//make power up go away
-    //   // }
-
-
-window.addEventListener("load", function () {
-    update();
-});
+// Invoke
+loop()
