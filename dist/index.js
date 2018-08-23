@@ -1,7 +1,50 @@
 const [canvas] = document.getElementsByTagName('canvas')
 const context = canvas.getContext('2d')
-canvas.width = window.innerWidth
-canvas.height = window.innerHeight
+const width = canvas.width
+const height = canvas.height
+
+
+/*
+  TODO: Maybe make this generative?
+*/
+const map = [
+  '                  #                       %            $',
+  ' ***  ** ***  ** ***  ** ***  ** ***  ** ***  ** ***  **',
+  '                      %             %                   ',
+  '** ******  **** **  ****** ******  ******* ******* *****',
+  '    #         %                                         ',
+  '** ***  ** ******* ******* ***  * ***     ** ***   *****',
+  '                        %              #         %      ',
+  '***** *  *** ******* ******* **  *** *******  ******* **',
+]
+
+
+/*
+  Level Generation.
+*/
+const obstacles = []
+const size = Math.floor(height / map.length)
+map.forEach((row, i) => {
+  const y = i * size
+  row.split('').forEach((block, j) => {
+    const x = j * size
+    console.log(x, y)
+    switch (block) {
+      case '*':
+        obstacles.push(obstacle(x, y, size, 25))
+      case '%':
+        // TODO: Monster
+      case '#':
+        // TODO: Powerup
+      case '$':
+        // TODO: End goal
+      default:
+        void 0
+    }
+  })
+})
+
+
 
 const controls = getControls()
 const player = {
@@ -10,22 +53,20 @@ const player = {
   width: 25,
   height: 25,
   speed: 3,
-  velocity: {
+  v: {
     x: 0,
     y: 0
   },
-  isJumping: false,
-  onGround: false,
+  jump: false,
+  grnd: false,
   draw() {
-    context.fillStyle = 'lightgreen'
+    // Update player based on movement (TODO: use a sprite)
+    if (this.jump) context.fillStyle = 'orange'
+    if (controls.right) context.fillStyle = 'red'
+    if (controls.left) context.fillStyle = 'lightgreen'
     context.fillRect(this.x, this.y, this.width, this.height)
   }
 }
-const obstacles = [
-  obstacle(0, window.innerHeight - 20, window.innerWidth, 20, '#212121'),
-  obstacle(window.innerWidth / 3, window.innerHeight - 130, window.innerWidth, 20, '#212121'),
-  obstacle(window.innerWidth / 4, window.innerHeight - 90, window.innerWidth, 20, '#212121'),
-]
 
 function loop() {
   // Clear drawing
@@ -37,32 +78,32 @@ function loop() {
   context.fillRect(0, 0, canvas.width, canvas.height)
 
   // Update player from controls
-  if (controls.jump && (!player.isJumping && player.onGround)) {
-    player.isJumping = true
-    player.onGround = false
-    player.velocity.y = -player.speed * 2.5 // jump height
+  if (controls.jump && (!player.jump && player.grnd)) {
+    player.jump = true
+    player.grnd = false
+    player.v.y = -player.speed * 2.5 // jump height
   }
-  if (controls.right && (player.velocity.x < player.speed)) player.velocity.x++
-  if (controls.left && (player.velocity.x > -player.speed)) player.velocity.x--
+  if (controls.right && (player.v.x < player.speed)) player.v.x++
+  if (controls.left && (player.v.x > -player.speed)) player.v.x--
 
   // Apply environment settings
-  player.velocity.x *= 0.8 // friction
-  player.velocity.y += 0.3 // gravity
-  player.onGround = false
+  player.v.x *= 0.8 // friction
+  player.v.y += 0.3 // gravity
+  player.grnd = false
 
   // Check for a collision with an obstacle
   obstacles.forEach(obstacle => {
     const [direction, adjustment] = obstacle.collides(player)
     if (direction === 'left' || direction === 'right') {
-      player.velocity.x = 0
-      player.isJumping = false
+      player.v.x = 0
+      player.jump = false
       player.x += adjustment
     } else if (direction === 'bottom') {
-      player.onGround = true
-      player.isJumping = false
+      player.grnd = true
+      player.jump = false
       player.y += adjustment
     } else if (direction === 'top') {
-      player.velocity.y *= -1
+      player.v.y *= -1
       player.y += adjustment
     }
     obstacle.draw()
@@ -71,32 +112,33 @@ function loop() {
 
 
 
-  // Apply player velocity to position
-  if (player.onGround) player.velocity.y = 0
-  player.x += player.velocity.x
-  player.y += player.velocity.y
+  // Apply player v to position
+  if (player.grnd) player.v.y = 0
+  player.x += player.v.x
+  player.y += player.v.y
   player.draw()
 
 
   // TODO: Test for collision with enemies and kill player
+  // TODO: Test for collision outside of canvas, and kill player
   // TODO: Test for collision with battery-packs and reset lighting
 
   requestAnimationFrame(loop)
 }
 
-function obstacle(x, y, width, height, color) {
+function obstacle(x, y, width, height) {
   return {
     x,
     y,
     width,
     height,
-    color,
     collides(player) {
       return checkCollision(player, this)
     },
     draw() {
-      context.fillStyle = color
-      context.fillRect(x, y, width, height)
+      context.fillStyle = '#212121'
+      this.x -= 1
+      context.fillRect(this.x, this.y, this.width, this.height)
     }
   }
 }
