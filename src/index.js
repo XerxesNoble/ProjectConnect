@@ -1,3 +1,5 @@
+import getControls from './controls'
+
 const [canvas] = document.getElementsByTagName('canvas')
 const context = canvas.getContext('2d')
 const width = canvas.width
@@ -164,26 +166,7 @@ function obstacle(x, y, width, height) {
   }
 }
 
-function getControls() {
-  const keys = {
-    jump: [38, 32, 87],
-    right: [39, 68],
-    left: [37, 65]
-  }
-  const controls = {
-    jump: false,
-    right: false,
-    left: false
-  }
-  const setControl = flag => {
-    Object.keys(controls).forEach(control => {
-      if (keys[control].indexOf(event.keyCode) > -1) controls[control] = flag
-    })
-  }
-  document.body.addEventListener('keydown', event => setControl(true))
-  document.body.addEventListener('keyup', event => setControl(false))
-  return controls
-}
+
 
 function checkCollision(a, b) {
   const vec = [
