@@ -3,9 +3,29 @@ const context = canvas.getContext('2d')
 const width = canvas.width
 const height = canvas.height
 
+const sound = {
+  play(d) {
+    with(new AudioContext)
+    with(G=createGain())
+    for(i in d)
+    with(createOscillator())
+    if(d[i])
+    connect(G),
+    G.connect(destination),
+    start(i*.1),
+    frequency.setValueAtTime(440*1.06**(13-d[i]),i*.1),type='triangle',
+    gain.setValueAtTime(1,i*.1),
+    gain.setTargetAtTime(.0001,i*.1+.08,.005),
+    stop(i*.1+.09)
+  },
+  jump() {
+    this.play([25,20,15])
+  }
+}
+
 
 /*
-  TODO: Maybe make this generative?
+  TOdO: Maybe make this generative?
 */
 const map = [
   '                  #                       %            $',
@@ -28,7 +48,6 @@ map.forEach((row, i) => {
   const y = i * size
   row.split('').forEach((block, j) => {
     const x = j * size
-    console.log(x, y)
     switch (block) {
       case '*':
         obstacles.push(obstacle(x, y, size, 25))
@@ -61,6 +80,7 @@ const player = {
   grnd: false,
   draw() {
     // Update player based on movement (TODO: use a sprite)
+    context.fillStyle = 'lightblue'
     if (this.jump) context.fillStyle = 'orange'
     if (controls.right) context.fillStyle = 'red'
     if (controls.left) context.fillStyle = 'lightgreen'
@@ -82,13 +102,14 @@ function loop() {
     player.jump = true
     player.grnd = false
     player.v.y = -player.speed * 2.5 // jump height
+    sound.jump()
   }
   if (controls.right && (player.v.x < player.speed)) player.v.x++
   if (controls.left && (player.v.x > -player.speed)) player.v.x--
 
   // Apply environment settings
   player.v.x *= 0.8 // friction
-  player.v.y += 0.3 // gravity
+  player.v.y += 0.25 // gravity
   player.grnd = false
 
   // Check for a collision with an obstacle
