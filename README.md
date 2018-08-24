@@ -10,7 +10,7 @@ npm install
 
 Run server
 ```bash
-npm run started
+npm start
 ```
 
 ### Building game files

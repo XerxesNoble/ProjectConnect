@@ -1,4 +1,4 @@
-export default function getControls() {
+function getControls() {
   const keys = {
     jump: [38, 32, 87],
     right: [39, 68],
@@ -18,3 +18,5 @@ export default function getControls() {
   document.body.addEventListener('keyup', event => setControl(false))
   return controls
 }
+
+export default getControls()
