@@ -1,24 +1,11 @@
 import gameObjects from '../gameObjects'
+import levels from './levels'
 
-/*
-  TODO: Maybe make this generative?
-*/
-const map = [
-  '                  #                       %            $',
-  ' ***  ** ***  ** ***  ** ***  ** ***  ** ***  ** ***  **',
-  '                      %             %                   ',
-  '** ******  **** **  ****** ******  ****. * ******* *****',
-  '    #         %                                         ',
-  '******  ** **  ***   **** ***  *      ***    ***   *****',
-  '    #         %                                         ',
-  '** ***  ** ******* ******* ***  * ***     ** ***   *****',
-  ' P                      %              #         %      ',
-  '***** *  *** ******* ******* **  *** *******  ******* **',
-]
+let currentLevel = levels[0];
 
 export default (canvas, context) => {
   // Object factories
-  const { player, obstacle } = gameObjects(context)
+  const { player, obstacle, deadzone } = gameObjects(context)
 
   // Collections for map
   const obstacles = []
@@ -26,8 +13,8 @@ export default (canvas, context) => {
   const powerps = []
   const end = { x: 0, y: 0 }
 
-  const size = Math.floor(canvas.height / map.length)
-  map.forEach((row, i) => {
+  const size = Math.floor(canvas.height / currentLevel.length)
+  currentLevel.forEach((row, i) => {
     const y = i * size
     row.split('').forEach((block, j) => {
       const x = j * size
@@ -54,6 +41,11 @@ export default (canvas, context) => {
       }
     })
   })
+
+  // Add deadzone
+  for(let i = 0; i < currentLevel[0].length; i ++) {
+    obstacles.push(deadzone(i * 25, canvas.height + 50))
+  }
 
   return { obstacles, monsters, powerps, player, end }
 }

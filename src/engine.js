@@ -1,6 +1,8 @@
 import controls from './controls'
 import map from './map'
 import audio from './audio'
+import { EVENTS } from './constants'
+import dispatcher from './utils/dispatcher'
 
 
 
@@ -11,11 +13,14 @@ export default class Engine{
     // Level Generation, get all objects that will be in the game
     // obstacles, monsters, powerps, player, end
     this.game = {...(map(this.canvas, this.context))}
-    console.log(this.game)
   }
 
   start(){
     this.loop();
+  }
+
+  stop() {
+    // TODO - Stop engine
   }
 
   loop(){
@@ -39,6 +44,7 @@ export default class Engine{
 
     // Apply environment settings
     this.game.player.v.x *= 0.8 // friction
+    // TODO - make this variable based on screen size
     this.game.player.v.y += 0.25 // gravity
     this.game.player.grnd = false
 
@@ -58,6 +64,11 @@ export default class Engine{
         this.game.player.y += adjustment
       }
       obstacle.draw()
+
+      // Game end - Fail!
+      if(direction !== null && obstacle.deadzone) {
+        dispatcher(this.canvas, EVENTS.LEVEL_FAIL)
+      }
     })
 
     // Apply player v to position
