@@ -1,4 +1,4 @@
-import { checkCollision } from '../util'
+import { checkCollision } from '../utils/collision'
 
 export default context => ({
   player: {
@@ -37,5 +37,38 @@ export default context => ({
         context.fillRect(this.x, this.y, this.width, this.height)
       }
     }
-  }
+  },
+  endSuccess(x, y, width, height) {
+    return {
+      x,
+      y,
+      width,
+      height,
+      collides(player) {
+        return checkCollision(player, this)
+      },
+      draw() {
+        context.fillStyle = '#f00'
+        this.x -= 1
+        context.fillRect(this.x, this.y, this.width, this.height)
+      }
+    }
+  },
+  deadzone(x, y, width = 25, height = 10) {
+    return {
+      x,
+      y,
+      width,
+      height,
+      deadzone: true,
+      collides(player) {
+        return checkCollision(player, this)
+      },
+      draw() {
+        context.fillStyle = '#ffffff'
+        this.x -= 1
+        context.fillRect(this.x, this.y, this.width, this.height)
+      }
+    }
+  },
 })
