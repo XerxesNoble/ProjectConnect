@@ -4,8 +4,6 @@ import audio from './audio'
 import { EVENTS } from './constants'
 import dispatcher from './utils/dispatcher'
 
-
-
 export default class Engine {
   constructor(canvas) {
     this.canvas = canvas
@@ -16,11 +14,11 @@ export default class Engine {
   }
 
   start() {
+    this.run = true
     this.loop();
   }
 
   stop() {
-    // TODO - Stop engine
     this.run = false
   }
 
@@ -28,9 +26,6 @@ export default class Engine {
     if (this.run === false) return
     // Clear drawing
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
-
-    // Darken
-
 
     // Draw background
     this.context.globalAlpha = 1
