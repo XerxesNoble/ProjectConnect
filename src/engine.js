@@ -20,7 +20,6 @@ export default class Engine {
   }
 
   stop() {
-    // TODO - Stop engine
     this.run = false
   }
 
