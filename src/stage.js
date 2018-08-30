@@ -9,7 +9,7 @@ export default function initStage(selector, callback) {
   // Add dynamicly sized canvas to dom
   stageParent.appendChild(canvas)
 
-  callback(canvas)
+  return canvas
 }
 
 function getCanvas(w, h){

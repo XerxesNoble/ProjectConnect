@@ -1,4 +1,5 @@
 import { checkCollision } from '../utils/collision'
+import GameObject from './GameObject'
 
 export default context => ({
   player: {
@@ -23,52 +24,17 @@ export default context => ({
     }
   },
   obstacle(x, y, width, height) {
-    return {
-      x,
-      y,
-      width,
-      height,
-      collides(player) {
-        return checkCollision(player, this)
-      },
-      draw() {
-        context.fillStyle = '#212121'
-        this.x -= 1
-        context.fillRect(this.x, this.y, this.width, this.height)
-      }
-    }
+    const fill = '#212121'
+    return new GameObject({ x, y, width, height, fill, context })
   },
   endSuccess(x, y, width, height) {
-    return {
-      x,
-      y,
-      width,
-      height,
-      collides(player) {
-        return checkCollision(player, this)
-      },
-      draw() {
-        context.fillStyle = '#f00'
-        this.x -= 1
-        context.fillRect(this.x, this.y, this.width, this.height)
-      }
-    }
+    const fill = '#f00'
+    return new GameObject({ x, y, width, height, fill, context })
   },
   deadzone(x, y, width = 25, height = 10) {
-    return {
-      x,
-      y,
-      width,
-      height,
-      deadzone: true,
-      collides(player) {
-        return checkCollision(player, this)
-      },
-      draw() {
-        context.fillStyle = '#ffffff'
-        this.x -= 1
-        context.fillRect(this.x, this.y, this.width, this.height)
-      }
-    }
+    const fill = '#f00'
+    const dz = new GameObject({ x, y, width, height, fill, context })
+    dz.deadzone = true
+    return dz
   },
 })
