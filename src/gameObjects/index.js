@@ -1,5 +1,16 @@
 import { checkCollision } from '../utils/collision'
+import { checkCollision } from '../utils/collision'
+import { BATTERY_LIFE } from '../constants'
 import GameObject from './GameObject'
+
+
+function reduceBatteryLife(player) {
+  const bl = player.batteryLife
+  const reduce = () => player.batteryLife -= 0.001
+  if (bl > 0.7) {
+    while (bl > 0.7)
+  }
+}
 
 export default context => ({
   player: {
@@ -14,6 +25,7 @@ export default context => ({
     },
     jump: false,
     grnd: false,
+    batteryLife: 1,
     draw() {
       // Update player based on movement (TODO: use a sprite)
       context.fillStyle = 'lightblue'
@@ -21,6 +33,17 @@ export default context => ({
       // if (controls.right) context.fillStyle = 'red'
       // if (controls.left) context.fillStyle = 'lightgreen'
       context.fillRect(this.x, this.y, this.width, this.height)
+    },
+    getBatteryLife() {
+      if (!this._lastChecked) {
+        this._lastChecked = Date.now()
+      } else if (Date.now() - this._lastChecked > (BATTERY_LIFE * 1000 / 3)) {
+        this.batteryLife -= 0.3
+        this._lastChecked = Date.now()
+        reduceBatteryLife(this)
+        console.log('BANG!')
+      }
+      return this.batteryLife
     }
   },
   obstacle(x, y, width, height) {

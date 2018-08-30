@@ -6,8 +6,8 @@ import dispatcher from './utils/dispatcher'
 
 
 
-export default class Engine{
-  constructor(canvas){
+export default class Engine {
+  constructor(canvas) {
     this.canvas = canvas
     this.context = canvas.getContext('2d')
     // Level Generation, get all objects that will be in the game
@@ -15,20 +15,25 @@ export default class Engine{
     this.game = {...(map(this.canvas, this.context))}
   }
 
-  start(){
+  start() {
     this.loop();
   }
 
   stop() {
     // TODO - Stop engine
+    this.run = false
   }
 
-  loop(){
+  loop() {
+    if (this.run === false) return
     // Clear drawing
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
+    // Darken
+
+
     // Draw background
-    this.context.globalAlpha = 1
+    this.context.globalAlpha = this.game.player.getBatteryLife()
     this.context.fillStyle = `#121212`
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
