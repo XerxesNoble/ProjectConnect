@@ -44,7 +44,7 @@ export default (canvas, context) => {
 
   // Add deadzone
   for(let i = 0; i < currentLevel[0].length; i ++) {
-    obstacles.push(deadzone(i * 25, canvas.height + 50))
+    obstacles.push(deadzone(i * size, canvas.height + 50, size))
   }
 
   return { obstacles, monsters, powerps, player, end }
