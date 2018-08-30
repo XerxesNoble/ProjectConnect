@@ -16,7 +16,7 @@ export default class GameObject {
 
   draw() {
     this.context.fillStyle = this.fill
-    this.x -= 1
+    this.x -= this.speed || 1
     this.context.fillRect(this.x, this.y, this.width, this.height)
   }
 }
