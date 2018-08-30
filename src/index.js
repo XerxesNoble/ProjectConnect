@@ -27,4 +27,21 @@ const game = {
 }
 
 
-game.start()
+
+// Screen initializers
+function initStartScreen(){
+  const ss = document.getElementById('startScreen')
+  ss.classList.add('is-active');
+  ss.querySelector('.start-game-cta').addEventListener('click', () => {
+    closeCurrentScreen();
+    game.start();
+  })
+}
+
+function closeCurrentScreen() {
+  document.querySelector('.screen-state.is-active').classList.remove('is-active')
+}
+
+
+window.game = game // For debugging
+initStartScreen()
