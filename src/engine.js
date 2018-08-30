@@ -4,10 +4,8 @@ import audio from './audio'
 import { EVENTS } from './constants'
 import dispatcher from './utils/dispatcher'
 
-
-
-export default class Engine{
-  constructor(canvas){
+export default class Engine {
+  constructor(canvas) {
     this.canvas = canvas
     this.context = canvas.getContext('2d')
     // Level Generation, get all objects that will be in the game
@@ -15,20 +13,25 @@ export default class Engine{
     this.game = {...(map(this.canvas, this.context))}
   }
 
-  start(){
+  start() {
+    this.run = true
     this.loop();
   }
 
   stop() {
-    // TODO - Stop engine
+    this.run = false
   }
 
-  loop(){
+  loop() {
+    if (this.run === false) return
     // Clear drawing
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
     // Draw background
     this.context.globalAlpha = 1
+    this.context.fillStyle = `#000000`
+    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
+    this.context.globalAlpha = this.game.player.getBatteryLife()
     this.context.fillStyle = `#121212`
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
@@ -78,9 +81,23 @@ export default class Engine{
     this.game.player.draw()
 
 
+    // Test for collision with battery-packs and reset lighting
+    this.game.powerups.forEach(batteryPack => {
+      // If batter has not been collected yet
+      if (batteryPack.collected === false) {
+        // If player collides with battery, increase power
+        if (batteryPack.collides(this.game.player)[0]) {
+          this.game.player.increaseBattery(batteryPack.power)
+          batteryPack.collected = true
+        } else {
+          batteryPack.draw()
+        }
+      }
+    })
+
+
     // TODO: Test for collision with enemies and kill player
     // TODO: Test for collision outside of canvas, and kill player
-    // TODO: Test for collision with battery-packs and reset lighting
 
     requestAnimationFrame(this.loop.bind(this))
   }
