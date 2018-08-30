@@ -7,4 +7,4 @@ export const EVENTS = {
   RETRY: 'RETRY',
 };
 
-export const BATTERY_LIFE = 60
+export const BATTERY_LIFE = 30 * 1000 // seconds

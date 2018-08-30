@@ -1,15 +1,17 @@
 import { checkCollision } from '../utils/collision'
-import { checkCollision } from '../utils/collision'
 import { BATTERY_LIFE } from '../constants'
 import GameObject from './GameObject'
 
 
 function reduceBatteryLife(player) {
-  const bl = player.batteryLife
-  const reduce = () => player.batteryLife -= 0.001
-  if (bl > 0.7) {
-    while (bl > 0.7)
+  const reducedValue = player.batteryLife - 0.3
+  const frame = () => {
+    player.batteryLife -= 0.001
+    if (player.batteryLife > reducedValue) requestAnimationFrame(frame)
   }
+  frame()
+  // TODO: Trigger update of Battery HUD here.
+  // TODO: Listen for battery pickup event to stall reduction
 }
 
 export default context => ({
@@ -37,13 +39,16 @@ export default context => ({
     getBatteryLife() {
       if (!this._lastChecked) {
         this._lastChecked = Date.now()
-      } else if (Date.now() - this._lastChecked > (BATTERY_LIFE * 1000 / 3)) {
-        this.batteryLife -= 0.3
+      } else if (Date.now() - this._lastChecked > (BATTERY_LIFE / 3)) {
         this._lastChecked = Date.now()
-        reduceBatteryLife(this)
-        console.log('BANG!')
+        if (this.batteryLife > 0.1) reduceBatteryLife(this) // Don't go under 0.1
       }
+
       return this.batteryLife
+    },
+    increaseBattery(power) {
+      this._lastChecked = Date.now()
+      this.batteryLife = Math.min(this.batteryLife + power, 1) // Clamp battery power at 1
     }
   },
   obstacle(x, y, width, height) {
@@ -60,4 +65,11 @@ export default context => ({
     dz.deadzone = true
     return dz
   },
+  batteryPack(x, y, width = 25, height = 25) {
+    const fill = '#388E3C'
+    const bp = new GameObject({ x, y, width, height, fill, context })
+    bp.collected = false
+    bp.power = 0.3
+    return bp
+  }
 })

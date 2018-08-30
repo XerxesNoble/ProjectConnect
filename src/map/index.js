@@ -5,12 +5,12 @@ let currentLevel = levels[0];
 
 export default (canvas, context) => {
   // Object factories
-  const { player, obstacle, deadzone } = gameObjects(context)
+  const { player, obstacle, deadzone, batteryPack } = gameObjects(context)
 
   // Collections for map
   const obstacles = []
   const monsters = []
-  const powerps = []
+  const powerups = []
   const end = { x: 0, y: 0 }
 
   const size = Math.floor(canvas.height / currentLevel.length)
@@ -26,7 +26,7 @@ export default (canvas, context) => {
           // TODO: Monster
           break
         case '#':
-          // TODO: Powerup
+          powerups.push(batteryPack(x, y))
           break
         case '$':
           end.x = x
@@ -47,5 +47,5 @@ export default (canvas, context) => {
     obstacles.push(deadzone(i * size, canvas.height + 50, size))
   }
 
-  return { obstacles, monsters, powerps, player, end }
+  return { obstacles, monsters, powerups, player, end }
 }
