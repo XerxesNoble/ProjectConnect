@@ -5,7 +5,7 @@ let currentLevel = levels[0];
 
 export default (canvas, context) => {
   // Object factories
-  const { player, obstacle, deadzone, batteryPack } = gameObjects(context)
+  const { player, obstacle, deadzone, batteryPack, enemy } = gameObjects(context)
 
   // Collections for map
   const obstacles = []
@@ -23,7 +23,7 @@ export default (canvas, context) => {
           obstacles.push(obstacle(x, y, size, 25))
           break
         case '%':
-          // TODO: Monster
+          monsters.push(enemy(x, y))
           break
         case '#':
           powerups.push(batteryPack(x, y))

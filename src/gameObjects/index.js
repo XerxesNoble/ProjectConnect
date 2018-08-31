@@ -71,5 +71,12 @@ export default context => ({
     bp.collected = false
     bp.power = 0.3
     return bp
+  },
+  enemy(x, y, width = 25, height = 25) {
+    const fill = ['#D32F2F', '#F44336'][Math.floor(Math.random() * 2)]
+    const enemy = new GameObject({ x, y, width, height, fill, context })
+    enemy.origin = { x, y }
+    enemy.speed = Math.random() * 5
+    return enemy
   }
 })
