@@ -21,6 +21,7 @@ export default context => ({
     width: 25,
     height: 25,
     speed: 3,
+    hspeed: context.dpr > 1 ? 4 : 3,
     v: {
       x: 0,
       y: 0
@@ -59,20 +60,20 @@ export default context => ({
     const fill = '#f00'
     return new GameObject({ x, y, width, height, fill, context })
   },
-  deadzone(x, y, width = 25, height = 10) {
+  deadzone(x, y, width, height) {
     const fill = '#f00'
     const dz = new GameObject({ x, y, width, height, fill, context })
     dz.deadzone = true
     return dz
   },
-  batteryPack(x, y, width = 25, height = 25) {
+  batteryPack(x, y, width, height) {
     const fill = '#388E3C'
     const bp = new GameObject({ x, y, width, height, fill, context })
     bp.collected = false
     bp.power = 0.3
     return bp
   },
-  enemy(x, y, width = 25, height = 25) {
+  enemy(x, y, width, height) {
     const fill = ['#D32F2F', '#F44336'][Math.floor(Math.random() * 2)]
     const enemy = new GameObject({ x, y, width, height, fill, context })
     enemy.origin = { x, y }
