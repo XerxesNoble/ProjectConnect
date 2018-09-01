@@ -7,7 +7,8 @@ import audio from './audio'
 const game = {
   start() {
     this.canvas = initStage('#gameStage')
-    this.engine = new Engine(this.canvas)
+    const hud = document.getElementById('hud')
+    this.engine = new Engine(this.canvas, hud)
 
     // Add Events
     this._gameFailSequence = this.gameFailSequence.bind(this)

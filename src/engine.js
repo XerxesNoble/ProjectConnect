@@ -5,8 +5,9 @@ import { EVENTS } from './constants'
 import dispatcher from './utils/dispatcher'
 
 export default class Engine {
-  constructor(canvas) {
+  constructor(canvas, hud) {
     this.canvas = canvas
+    this.hud = hud
     this.context = canvas.getContext('2d')
     // Level Generation, get all objects that will be in the game
     // obstacles, monsters, powerps, player, end
@@ -24,6 +25,7 @@ export default class Engine {
 
   loop() {
     if (this.run === false) return
+    this.hud.innerHTML = `Battery: ${(this.game.player.getBatteryLife() * 100).toFixed(1)}%`
     // Clear drawing
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
 

@@ -17,6 +17,15 @@
   left:0;
 }
 
+#hud {
+  position: absolute;
+  z-index: 1;
+  font-size: 20px;
+  padding: 25px;
+  bottom: 0;
+  right: 0;
+}
+
 body h1{
   z-index: 1;
   position: absolute;
@@ -58,4 +67,3 @@ body h1{
   border: 2px solid #cecece;
   background-color: dark-grey;
 }
-
