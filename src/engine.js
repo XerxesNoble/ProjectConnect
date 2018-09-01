@@ -71,6 +71,7 @@ export default class Engine {
       obstacle.draw()
 
       // Game end - Fail!
+      // TODO: Bug here if player falls outside at the end.. the name namer ends. 
       if(direction !== null && obstacle.deadzone) {
         dispatcher(this.canvas, EVENTS.LEVEL_FAIL)
       }
@@ -98,7 +99,26 @@ export default class Engine {
     })
 
 
-    // TODO: Test for collision with enemies and kill player
+    // Test for collision with enemies and kill player
+    this.game.monsters.forEach(enemy => {
+      const [direction] = enemy.collides(this.game.player)
+      if (direction) dispatcher(this.canvas, EVENTS.LEVEL_FAIL) // TODO: Ability to kill enemy?
+      // Test if enemy is outside of game view
+      const [inView] = enemy.collides({
+        x: 0,
+        y:0,
+        width: this.canvas.width,
+        height: this.canvas.height
+      })
+      // If outside of view, reset position
+      if (!inView) {
+        enemy.x = enemy.origin.x
+        enemy.y = enemy.origin.y
+      }
+      enemy.draw()
+    })
+
+
     // TODO: Test for collision outside of canvas, and kill player
 
     requestAnimationFrame(this.loop.bind(this))
