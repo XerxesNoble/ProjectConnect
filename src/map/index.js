@@ -1,17 +1,16 @@
 import gameObjects from '../gameObjects'
 import levels from './levels'
 
-let currentLevel = levels[1];
-
-export default (canvas, context) => {
+const map = (canvas, context, levelIndex = 1) => {
+  const currentLevel = levels[levelIndex];
   // Object factories
-  const { player, obstacle, deadzone, batteryPack, enemy } = gameObjects(context)
+  const { player, obstacle, deadzone, batteryPack, enemy, door } = gameObjects(context)
 
   // Collections for map
   const obstacles = []
   const monsters = []
   const powerups = []
-  const end = { x: 0, y: 0 }
+  let end
   const spriteSize = context._spriteSize
   const size = Math.floor(canvas.height / currentLevel.length)
   currentLevel.forEach((row, i) => {
@@ -29,12 +28,12 @@ export default (canvas, context) => {
           powerups.push(batteryPack(x, y, spriteSize, spriteSize))
           break
         case '$':
-          end.x = x
-          end.y = y
+          end = door(x, y, spriteSize, spriteSize)
           break
         case 'P':
           player.x = x
           player.y = y
+          player.width = player.height = spriteSize
           break
         default:
           void 0
@@ -43,11 +42,13 @@ export default (canvas, context) => {
   })
 
   // Add deadzone
-  for(let i = 0; i < currentLevel[0].length; i ++) {
+  for(let i = 0; i < currentLevel[levelIndex].length; i ++) {
     obstacles.push(deadzone(i * size, canvas.height + 50, size))
   }
 
-  player.width = player.height = spriteSize
 
   return { obstacles, monsters, powerups, player, end }
 }
+
+map.levels = levels // yolo
+export default map

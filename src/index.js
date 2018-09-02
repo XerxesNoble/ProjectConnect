@@ -17,7 +17,6 @@ const game = {
 
     // Start game loop
     this.engine.start()
-    // this.engine.stop()
   },
   gameFailSequence() {
     this.canvas.removeEventListener(EVENTS.LEVEL_FAIL, this._gameFailSequence);

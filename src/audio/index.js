@@ -20,7 +20,13 @@ export default {
     }
   },
   jump() {
+    this.play([25])
+  },
+  win() {
     this.play([25,20,15])
+  },
+  powerup() {
+    this.play([13,12,11,10], 0.08)
   },
   die() {
     this.play([13,14,15,,16,17,18,,19,20,21], 0.2)
