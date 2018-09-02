@@ -7,6 +7,12 @@ import dispatcher from './utils/dispatcher'
 export default class Engine {
   constructor(context, hud) {
     this.hud = hud
+    this.views = {
+      battery: document.getElementById('battery'),
+      currentLevel: document.getElementById('currentLevel'),
+      lives: document.getElementById('lives'),
+      powerups: document.getElementById('collected-powerups'),
+    }
     this.context = context
     this.canvas = context.canvas
     this.currentLevel = 0
@@ -44,9 +50,21 @@ export default class Engine {
     this.run = false
   }
 
+  updateHUD() {
+    const { battery, currentLevel, lives, powerups } = this.views
+
+    battery.innerHTML = `Battery: ${(this.game.player.getBatteryLife() * 100).toFixed(1)}%`
+    currentLevel.innerHTML = `Level: ${this.currentLevel + 1}`
+
+    // TODO: Implement lives system
+    lives.innerHTML = `Lives: ${this.lives || 3}`
+    // TODO: Implement powerup collection
+    powerups.innerHTML = `Powerups: ${this.game.collectedPowerups}/${this.game.totalPowerups}`
+  }
+
   loop() {
     if (this.run === false) return
-    this.hud.innerHTML = `Battery: ${(this.game.player.getBatteryLife() * 100).toFixed(1)}%`
+    this.updateHUD()
     // Clear drawing
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
@@ -113,6 +131,7 @@ export default class Engine {
         if (batteryPack.collides(this.game.player)[0]) {
           this.game.player.increaseBattery(batteryPack.power)
           batteryPack.collected = true
+          this.game.collectedPowerups++
           audio.powerup()
         } else {
           batteryPack.draw()

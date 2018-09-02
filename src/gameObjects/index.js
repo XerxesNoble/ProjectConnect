@@ -6,6 +6,7 @@ import GameObject from './GameObject'
 function reduceBatteryLife(player) {
   const reducedValue = player.batteryLife - 0.3
   const frame = () => {
+    if (player.cancelDecay) return (player.cancelDecay = false)
     player.batteryLife -= 0.001
     if (player.batteryLife > reducedValue) requestAnimationFrame(frame)
   }
@@ -48,6 +49,7 @@ export default context => ({
       return this.batteryLife
     },
     increaseBattery(power) {
+      this.cancelDecay = true
       this._lastChecked = Date.now()
       this.batteryLife = Math.min(this.batteryLife + power, 1) // Clamp battery power at 1
     }
