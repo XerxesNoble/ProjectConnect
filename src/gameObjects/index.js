@@ -79,5 +79,9 @@ export default context => ({
     enemy.origin = { x, y }
     enemy.speed = Math.random() * 5
     return enemy
+  },
+  door(x, y, width, height) {
+    const fill = 'purple'
+    return new GameObject({ x, y, width, height, fill, context })
   }
 })

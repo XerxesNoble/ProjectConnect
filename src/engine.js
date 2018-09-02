@@ -9,13 +9,30 @@ export default class Engine {
     this.hud = hud
     this.context = context
     this.canvas = context.canvas
-    // Level Generation, get all objects that will be in the game
-    // obstacles, monsters, powerps, player, end
-    this.game = {...(map(this.canvas, this.context))}
+    this.currentLevel = 0
+
+    // When player reaches goal, Go to next map
+    this.canvas.addEventListener(EVENTS.LEVEL_COMPLETE, () => {
+      this.currentLevel++
+      if (this.currentLevel === map.levels.length) {
+        // YOU WIN!
+      } else {
+        // Next Level
+        this.startLevel()
+      }
+    })
 
     this.friction = 0.8
     this.jumpHeight = this.context._spriteSize / 10 // 2.5 (non-retina)
     this.gravity = this.context._spriteSize / 100 // 0.25 (non-retina)
+
+    this.startLevel()
+  }
+
+  startLevel() {
+    // Level Generation, get all objects that will be in the game
+    // obstacles, monsters, powerps, player, end
+    this.game = {...(map(this.canvas, this.context, this.currentLevel))}
   }
 
   start() {
@@ -96,6 +113,7 @@ export default class Engine {
         if (batteryPack.collides(this.game.player)[0]) {
           this.game.player.increaseBattery(batteryPack.power)
           batteryPack.collected = true
+          audio.powerup()
         } else {
           batteryPack.draw()
         }
@@ -121,6 +139,15 @@ export default class Engine {
       }
       enemy.draw()
     })
+
+
+    // Player has reached end
+    if (this.game.end.collides(this.game.player)[0]) {
+      audio.win()
+      dispatcher(this.canvas, EVENTS.LEVEL_COMPLETE)
+    } else {
+      this.game.end.draw()
+    }
 
 
     // TODO: Test for collision outside of canvas, and kill player
