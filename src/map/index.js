@@ -11,6 +11,7 @@ const map = (canvas, context, levelIndex = 1) => {
   const monsters = []
   const powerups = []
   let end
+  let totalPowerups = 0
   const spriteSize = context._spriteSize
   const size = Math.floor(canvas.height / currentLevel.length)
   currentLevel.forEach((row, i) => {
@@ -26,6 +27,7 @@ const map = (canvas, context, levelIndex = 1) => {
           break
         case '#':
           powerups.push(batteryPack(x, y, spriteSize, spriteSize))
+          totalPowerups++
           break
         case '$':
           end = door(x, y, spriteSize, spriteSize)
@@ -47,7 +49,15 @@ const map = (canvas, context, levelIndex = 1) => {
   }
 
 
-  return { obstacles, monsters, powerups, player, end }
+  return {
+    obstacles,
+    monsters,
+    powerups,
+    player,
+    end,
+    totalPowerups,
+    collectedPowerups: 0,
+  }
 }
 
 map.levels = levels // yolo
