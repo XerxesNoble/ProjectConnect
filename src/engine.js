@@ -163,6 +163,7 @@ export default class Engine {
     // Player has reached end
     if (this.game.end.collides(this.game.player)[0]) {
       audio.win()
+      // TODO - Trigger game end animation
       dispatcher(this.canvas, EVENTS.LEVEL_COMPLETE)
     } else {
       this.game.end.draw()

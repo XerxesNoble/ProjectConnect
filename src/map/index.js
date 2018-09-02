@@ -44,8 +44,9 @@ const map = (canvas, context, levelIndex = 1) => {
   })
 
   // Add deadzone
-  for(let i = 0; i < currentLevel[levelIndex].length; i ++) {
-    obstacles.push(deadzone(i * size, canvas.height + 50, size))
+  // Add 5 units of buffer at the end of the game and at the start of the game
+  for(let i = -5; i < currentLevel[levelIndex].length + 5; i ++) {
+    obstacles.push(deadzone(i * size, canvas.height + 50, size, 1))
   }
 
 
