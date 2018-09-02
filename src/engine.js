@@ -5,12 +5,17 @@ import { EVENTS } from './constants'
 import dispatcher from './utils/dispatcher'
 
 export default class Engine {
-  constructor(canvas) {
-    this.canvas = canvas
-    this.context = canvas.getContext('2d')
+  constructor(context, hud) {
+    this.hud = hud
+    this.context = context
+    this.canvas = context.canvas
     // Level Generation, get all objects that will be in the game
     // obstacles, monsters, powerps, player, end
     this.game = {...(map(this.canvas, this.context))}
+
+    this.friction = 0.8
+    this.jumpHeight = this.context._spriteSize / 10 // 2.5 (non-retina)
+    this.gravity = this.context._spriteSize / 100 // 0.25 (non-retina)
   }
 
   start() {
@@ -24,6 +29,7 @@ export default class Engine {
 
   loop() {
     if (this.run === false) return
+    this.hud.innerHTML = `Battery: ${(this.game.player.getBatteryLife() * 100).toFixed(1)}%`
     // Clear drawing
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
@@ -39,16 +45,16 @@ export default class Engine {
     if (controls.jump && (!this.game.player.jump && this.game.player.grnd)) {
       this.game.player.jump = true
       this.game.player.grnd = false
-      this.game.player.v.y = -this.game.player.speed * 2.5 // jump height
+      this.game.player.v.y = -this.game.player.speed * this.jumpHeight // jump height
       audio.jump()
     }
-    if (controls.right && (this.game.player.v.x < this.game.player.speed)) this.game.player.v.x++
-    if (controls.left && (this.game.player.v.x > -this.game.player.speed)) this.game.player.v.x--
+    if (controls.right && (this.game.player.v.x < this.game.player.hspeed)) this.game.player.v.x++
+    if (controls.left && (this.game.player.v.x > -this.game.player.hspeed)) this.game.player.v.x--
 
     // Apply environment settings
-    this.game.player.v.x *= 0.8 // friction
-    // TODO - make this variable based on screen size
-    this.game.player.v.y += 0.25 // gravity
+    this.game.player.v.x *= this.friction
+    this.game.player.v.y += this.gravity
+
     this.game.player.grnd = false
 
     // Check for a collision with an obstacle
@@ -69,7 +75,7 @@ export default class Engine {
       obstacle.draw()
 
       // Game end - Fail!
-      // TODO: Bug here if player falls outside at the end.. the name namer ends. 
+      // TODO: Bug here if player falls outside at the end
       if(direction !== null && obstacle.deadzone) {
         dispatcher(this.canvas, EVENTS.LEVEL_FAIL)
       }

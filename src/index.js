@@ -6,8 +6,10 @@ import audio from './audio'
 
 const game = {
   start() {
-    this.canvas = initStage('#gameStage')
-    this.engine = new Engine(this.canvas)
+    this.context = initStage('#gameStage')
+    this.canvas = this.context.canvas
+    const hud = document.getElementById('hud')
+    this.engine = new Engine(this.context, hud)
 
     // Add Events
     this._gameFailSequence = this.gameFailSequence.bind(this)
@@ -15,21 +17,29 @@ const game = {
 
     // Start game loop
     this.engine.start()
+    // this.engine.stop()
   },
   gameFailSequence() {
     this.canvas.removeEventListener(EVENTS.LEVEL_FAIL, this._gameFailSequence);
-    console.log('Yo, don\'t suck');
     audio.die()
     this.engine.stop();
     // TODO - Display Retry Screen
     setTimeout(() => window.location.reload(), 3000);
+  },
+  frame() {
+    this.engine.start()
+    this.engine.stop()
   }
 }
 
 
 
+
+
 // Screen initializers
 function initStartScreen(){
+  return game.start() // DEBUG
+
   const ss = document.getElementById('startScreen')
   ss.classList.add('is-active');
   ss.querySelector('.start-game-cta').addEventListener('click', () => {

@@ -1,7 +1,7 @@
 import gameObjects from '../gameObjects'
 import levels from './levels'
 
-let currentLevel = levels[0];
+let currentLevel = levels[1];
 
 export default (canvas, context) => {
   // Object factories
@@ -12,7 +12,7 @@ export default (canvas, context) => {
   const monsters = []
   const powerups = []
   const end = { x: 0, y: 0 }
-
+  const spriteSize = context._spriteSize
   const size = Math.floor(canvas.height / currentLevel.length)
   currentLevel.forEach((row, i) => {
     const y = i * size
@@ -20,13 +20,13 @@ export default (canvas, context) => {
       const x = j * size
       switch (block) {
         case '*':
-          obstacles.push(obstacle(x, y, size, 25))
+          obstacles.push(obstacle(x, y, size, spriteSize))
           break
         case '%':
-          monsters.push(enemy(x, y))
+          monsters.push(enemy(x, y, spriteSize, spriteSize))
           break
         case '#':
-          powerups.push(batteryPack(x, y))
+          powerups.push(batteryPack(x, y, spriteSize, spriteSize))
           break
         case '$':
           end.x = x
@@ -46,6 +46,8 @@ export default (canvas, context) => {
   for(let i = 0; i < currentLevel[0].length; i ++) {
     obstacles.push(deadzone(i * size, canvas.height + 50, size))
   }
+
+  player.width = player.height = spriteSize
 
   return { obstacles, monsters, powerups, player, end }
 }
