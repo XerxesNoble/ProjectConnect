@@ -120,7 +120,6 @@ export default class Engine {
       obstacle.draw()
 
       // Game end - Fail!
-      // TODO: Bug here if player falls outside at the end
       if(direction !== null && obstacle.deadzone) {
         dispatcher(this.canvas, EVENTS.LEVEL_FAIL)
       }
@@ -142,6 +141,8 @@ export default class Engine {
           player.increaseBattery(batteryPack.power)
           batteryPack.collected = true
           this.game.collectedPowerups++
+          // Add a life if all powerups are collected
+          if (this.game.collectedPowerups === this.game.totalPowerups) this.lives++
           audio.powerup()
         } else {
           batteryPack.draw()

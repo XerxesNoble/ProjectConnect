@@ -19,7 +19,6 @@ const game = {
     this.engine.start()
   },
   gameFailSequence() {
-    console.log('BANG?!')
     this.canvas.removeEventListener(EVENTS.GAME_OVER, this._gameFailSequence);
     audio.die()
     this.engine.stop();
