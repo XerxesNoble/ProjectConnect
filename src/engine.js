@@ -8,7 +8,6 @@ export default class Engine {
   constructor(context, hud) {
     this.hud = hud
     this.lives = 3 // Game constant?
-    
     this.views = {
       battery: document.getElementById('battery'),
       currentLevel: document.getElementById('currentLevel'),
