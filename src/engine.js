@@ -53,13 +53,13 @@ export default class Engine {
   updateHUD() {
     const { battery, currentLevel, lives, powerups } = this.views
 
-    battery.innerHTML = `Battery: ${(this.game.player.getBatteryLife() * 100).toFixed(1)}%`
-    currentLevel.innerHTML = `Level: ${this.currentLevel + 1}`
+    battery.textContent = `Battery: ${(this.game.player.getBatteryLife() * 100).toFixed(1)}%`
+    currentLevel.textContent = `Level: ${this.currentLevel + 1}`
 
     // TODO: Implement lives system
-    lives.innerHTML = `Lives: ${this.lives || 3}`
+    // lives.textContent = `Lives: ${this.lives || 3}`
     // TODO: Implement powerup collection
-    powerups.innerHTML = `Powerups: ${this.game.collectedPowerups}/${this.game.totalPowerups}`
+    // powerups.textContent = `Powerups: ${this.game.collectedPowerups}/${this.game.totalPowerups}`
   }
 
   loop() {
