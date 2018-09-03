@@ -27,13 +27,36 @@
   border-bottom: 2px solid grey;
 }
 
-#hud > p {
-  display: inline-block;
-  border: 2px solid lightgreen;
-  padding: 5px;
-  min-width: 20%;
-  margin-top: 70px;
+.hud-group{
+  position: absolute;
+  top: 0px;
+  max-width: 20%;
 }
+
+.right-hud{
+  right: 0px;
+  text-align: right;
+}
+
+.left-hud{
+  left: 0px;
+  text-align: left;
+}
+
+.hud-component{
+  width: 100%;
+  position: relative;
+}
+
+/* Battery styles */
+#battery {
+
+}
+
+#batteryIcon{
+
+}
+
 
 body h1{
   z-index: 1;

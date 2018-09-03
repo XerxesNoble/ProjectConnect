@@ -7,17 +7,25 @@
   <body>
     <!-- Heads Up Display -->
     <div id="hud">
-      <h1 id="gameTitle">ProjectConnect</h1>
-      <p id="battery">Battery: 100%</p>
-      <p id="currentLevel">Level: 4</p>
-      <p id="lives">Lives: 3</p>
-      <p id="collected-powerups">Powerups: 2/10</p>
+      <div id="currentLevel" class="hud-component">Level: 4</div>
+      <div class="hud-group right-hud" >
+        <div id="battery" class="hud-component">
+          <div class="icon"><div>
+          <div class="bar"><div>
+          <div class="battery-percent">100%<div>
+        </div>
+      </div>
+      <div class="hud-group left-hud">
+        <div id="collected-powerups" class="hud-component">Powerups: 2/10</div>
+        <div id="lives" class="hud-component">Lives: 3</div>
+      </div>
     </div>
     <!-- Game Canvas -->
     <div id="gameStage"></div>
 
     <!-- Title Screen -->
     <div id="startScreen" class="screen-state">
+      <h1 id="gameTitle">ProjectConnect</h1>
       <div class="back-story">Oh noes! The internet has been taken!</div>
       <div class="controls-tut">◅ ▻ Arrows to move, space bar to jump.</div>
       <div class="start-game-cta">Get the internet back!</div>
