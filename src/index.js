@@ -13,13 +13,14 @@ const game = {
 
     // Add Events
     this._gameFailSequence = this.gameFailSequence.bind(this)
-    this.canvas.addEventListener(EVENTS.LEVEL_FAIL, this._gameFailSequence)
+    this.canvas.addEventListener(EVENTS.GAME_OVER, this._gameFailSequence)
 
     // Start game loop
     this.engine.start()
   },
   gameFailSequence() {
-    this.canvas.removeEventListener(EVENTS.LEVEL_FAIL, this._gameFailSequence);
+    console.log('BANG?!')
+    this.canvas.removeEventListener(EVENTS.GAME_OVER, this._gameFailSequence);
     audio.die()
     this.engine.stop();
     // TODO - Display Retry Screen
