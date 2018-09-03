@@ -5,7 +5,7 @@ export default function initStage(selector, callback) {
   const bbox = stageParent.getBoundingClientRect()
 
   // Set width and height here & return context
-  const context = getContext(bbox.width, bbox.height - 150)
+  const context = getContext(bbox.width, bbox.height)
 
   // Add dynamicly sized canvas to dom
   stageParent.appendChild(context.canvas)

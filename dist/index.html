@@ -7,11 +7,25 @@
   <body>
     <!-- Heads Up Display -->
     <div id="hud">
-      <h1 id="gameTitle">ProjectConnect</h1>
-      <p id="battery">Battery: 100%</p>
-      <p id="currentLevel">Level: 4</p>
-      <p id="lives">Lives: 3</p>
-      <p id="collected-powerups">Powerups: 2/10</p>
+      <div class="hud-group" id="hudStats">
+        <div class="hud-component" id="powerups-container">
+          <img src="assets/wifi.svg" />
+          <div id="collected-powerups">2/10</div>
+        </div>
+        <div class="hud-component" id="lives">Lives: 3</div>
+      </div>
+      <div class="hud-group" id="currentLevel">Level: 4</div>
+      <div class="hud-group">
+        <div class="hud-component" id="battery">
+          <div class="battery-icon">
+            <img src="assets/battery.svg" />
+          </div>
+          <div class="battery-bar" id="batteryBar">
+            <div id="batteryBarInner"></div>
+          </div>
+          <div class="battery-percent" id="batteryPercent"></div>
+        </div>
+      </div>
     </div>
     <!-- Game Canvas -->
     <div id="gameStage"></div>

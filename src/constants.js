@@ -9,3 +9,10 @@ export const EVENTS = {
 };
 
 export const BATTERY_LIFE = 30 * 1000 // seconds
+
+
+export const BATTERY_STATES = {
+  HIGH: 'healthy',
+  MEDIUM: 'not-so-great',
+  LOW: 'critical',
+}

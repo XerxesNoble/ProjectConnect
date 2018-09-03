@@ -1,7 +1,7 @@
 import controls from './controls'
 import map from './map'
 import audio from './audio'
-import { EVENTS } from './constants'
+import { EVENTS, BATTERY_STATES } from './constants'
 import dispatcher from './utils/dispatcher'
 
 export default class Engine {
@@ -9,7 +9,12 @@ export default class Engine {
     this.hud = hud
     this.lives = 3 // Game constant?
     this.views = {
-      battery: document.getElementById('battery'),
+      battery: {
+        container: document.getElementById('battery'),
+        bar: document.getElementById('batteryBar'),
+        barInner: document.getElementById('batteryBarInner'),
+        percent: document.getElementById('batteryPercent'),
+      },
       currentLevel: document.getElementById('currentLevel'),
       lives: document.getElementById('lives'),
       powerups: document.getElementById('collected-powerups'),
@@ -60,14 +65,49 @@ export default class Engine {
     this.run = false
   }
 
+  setupHUD() {
+    this.HUDisSet = true;
+    const { container, bar } = this.views.battery
+    const w = container.getBoundingClientRect().width;
+    bar.style.width = `${w}px`;
+  }
+
+  setBatteryState(newState) {
+    const { barInner } = this.views.battery
+    if(barInner.classList.contains(newState)) return
+    Object.keys(BATTERY_STATES).forEach((state) => {
+      barInner.classList.remove(BATTERY_STATES[state])
+    })
+    barInner.classList.add(newState)
+  }
+
   updateHUD() {
+    if(!this.HUDisSet) this.setupHUD();
     const { battery, currentLevel, lives, powerups } = this.views
-    battery.innerHTML = `Battery: ${(this.game.player.getBatteryLife() * 100).toFixed(1)}%`
+   
     currentLevel.innerHTML = `Level: ${this.currentLevel + 1}`
 
     // TODO: Implement lives system
     lives.innerHTML = `Lives: ${this.lives}`
-    powerups.innerHTML = `Powerups: ${this.game.collectedPowerups}/${this.game.totalPowerups}`
+
+    // TODO: Implement powerup collection
+    powerups.textContent = `${this.game.collectedPowerups}/${this.game.totalPowerups}`
+
+    // Battery
+    const batteryCharge = (this.game.player.getBatteryLife() * 100).toFixed(1)
+    battery.percent.textContent = `${batteryCharge}%`
+    battery.barInner.style.width = `${batteryCharge}%`
+    // Bar color
+    if(batteryCharge >= 50) {
+      this.setBatteryState(BATTERY_STATES.HIGH)
+      battery.barInner.classList.add('healthy')
+    } else if(batteryCharge < 50 && batteryCharge > 25) {
+      this.setBatteryState(BATTERY_STATES.MEDIUM)
+    } else if(batteryCharge <= 25) {
+      this.setBatteryState(BATTERY_STATES.LOW)
+    }
+
+    currentLevel.textContent = `Level: ${this.currentLevel + 1}`
   }
 
   loop() {
