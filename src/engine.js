@@ -66,7 +66,7 @@ export default class Engine {
     currentLevel.innerHTML = `Level: ${this.currentLevel + 1}`
 
     // TODO: Implement lives system
-    lives.innerHTML = `Lives: ${this.lives || 3}`
+    lives.innerHTML = `Lives: ${this.lives}`
     powerups.innerHTML = `Powerups: ${this.game.collectedPowerups}/${this.game.totalPowerups}`
   }
 
