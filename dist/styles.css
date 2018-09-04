@@ -1,8 +1,6 @@
 * {
   margin: 0;
-  background: #212121;
-  color: lightgrey;
-  text-align: center;
+  color: #d3d3d3;
   font-family: monospace;
   overflow: hidden;
 }
@@ -13,42 +11,24 @@
   margin: 0;
   padding: 0;
   position: absolute;
-  top: 150px;
   left:0;
-}
-
-#hud {
-  position: absolute;
-  z-index: 1;
-  font-size: 20px;
-  padding: 25px;
-  width: 100%;
-  height: 100px;
-  border-bottom: 2px solid grey;
-}
-
-#hud > p {
-  display: inline-block;
-  border: 2px solid lightgreen;
-  padding: 5px;
-  min-width: 20%;
-  margin-top: 70px;
+  background: #212121;
 }
 
 body h1{
   z-index: 1;
   position: absolute;
-  background: rgba(0,0,0,0);
   width: 100%;
+  background: #212121;
   padding-top: 10px;
 }
 
 .screen-state{
   display:none;
-
   width: 100%;
   height: 100%;
   position: absolute;
+  background: #212121;
 }
 
 .screen-state.is-active{
@@ -57,16 +37,9 @@ body h1{
 
 
 /*Start screen*/
-#startScreen{
-  padding-top:30%;
-}
-.back-story{
-  margin-bottom: 10px;
-}
-
-.controls-tut{
-  color: yellow;
-}
+#startScreen{ padding-top:30%; }
+.back-story{ margin-bottom: 10px; }
+.controls-tut{ color: yellow; }
 
 .start-game-cta{
   margin:25px;
@@ -76,3 +49,64 @@ body h1{
   border: 2px solid #cecece;
   background-color: dark-grey;
 }
+
+/* HUD */
+#hud {
+  position: absolute;
+  background: rgba(255,255,255,0.1);
+  z-index: 1;
+  font-size: 20px;
+  width: 100%;
+  height: 100px;
+  border-bottom: 2px solid grey;
+  display:flex;
+}
+
+.hud-group {
+  flex: 1;
+  justify-content: center;
+  padding: 16px;
+}
+
+#currentLevel.hud-group{
+  flex:2;
+  text-align: center;
+}
+
+#battery{ text-align:right; }
+#battery div{ float:right; }
+.battery-icon{ height: 60px; }
+.battery-icon img{ height: 100%; }
+.battery-percent{ padding-top: 35px; }
+
+.battery-bar{
+  height:10px;
+  border:2px solid #d3d3d3;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+#batteryBar{
+  float: none;
+  position: absolute;
+  top: 30px;
+  right: 60px;
+}
+
+#batteryBarInner{
+  height: 100%;
+}
+
+.healthy{ background-color: #0f0; }
+.not-so-great{ background-color: #ffd400; }
+.critical{ background-color: #f00; }
+
+#powerups-container div{ display: inline-block; }
+#powerups-container img{
+  height:25px;
+  display: inline-block;
+}
+
+
+
+
