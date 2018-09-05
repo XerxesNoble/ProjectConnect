@@ -37,7 +37,7 @@ const game = {
 
 // Screen initializers
 function initStartScreen(){
-  return game.start() // DEBUG
+  // return game.start() // DEBUG
 
   const ss = document.getElementById('startScreen')
   ss.classList.add('is-active');

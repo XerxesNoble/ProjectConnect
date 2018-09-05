@@ -29,25 +29,55 @@ body h1{
   height: 100%;
   position: absolute;
   background: #212121;
+  text-align: center;
 }
 
 .screen-state.is-active{
   display: block;
+  z-index:2;
 }
 
 
 /*Start screen*/
-#startScreen{ padding-top:30%; }
-.back-story{ margin-bottom: 10px; }
-.controls-tut{ color: yellow; }
+#startScreen{ padding-top:10%; }
+.dope-logo{
+  font-family: sans-serif impact;
+  font-size: 30px;
+  padding-bottom:5%;
+}
+.dope-logo img{height:35px;}
+.dope-logo img,
+.dope-logo p{
+  display: inline-block;
+}
+
+.back-story{
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+.controls-tut{
+  color: yellow;
+  padding-bottom: 8px;
+}
 
 .start-game-cta{
-  margin:25px;
   font-size: 14px;
   padding: 7px 5px;
   border-radius: 5px;
-  border: 2px solid #cecece;
-  background-color: dark-grey;
+  background-color: #d3d3d3;
+  color: #000;
+  width: 200px;
+  transition: all 0.3;
+  margin:25px auto;
+  font-size: 20px;
+}
+
+.start-game-cta:hover{
+  background-color: yellow;
+}
+
+.start-game-cta:active{
+  background-color: #0f0;
 }
 
 /* HUD */
