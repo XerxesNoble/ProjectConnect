@@ -24,24 +24,8 @@ export default class Engine {
     this.currentLevel = 0
 
     // When player reaches goal, Go to next map
-    this.canvas.addEventListener(EVENTS.LEVEL_COMPLETE, () => {
-      this.currentLevel++
-      if (this.currentLevel === map.levels.length) {
-        // YOU WIN!
-      } else {
-        // Next Level
-        this.startLevel()
-      }
-    })
-
-    this.canvas.addEventListener(EVENTS.LEVEL_FAIL, () => {
-      this.lives-- // Remove a life
-      if (this.lives === -1) dispatcher(this.canvas, EVENTS.GAME_OVER)
-      else {
-        // TODO: Retry screen? New Life?
-        this.startLevel()
-      }
-    })
+    this.canvas.addEventListener(EVENTS.LEVEL_COMPLETE, this.levelCompleteHandler.bind(this))
+    this.canvas.addEventListener(EVENTS.LEVEL_FAIL, this.livesHandler.bind(this))
 
     this.friction = 0.8
     this.jumpHeight = this.context._spriteSize / 10 // 2.5 (non-retina)
@@ -81,10 +65,30 @@ export default class Engine {
     barInner.classList.add(newState)
   }
 
+  livesHandler() {
+    this.canvas.removeEventListener(EVENTS.LEVEL_FAIL, this.livesHandler)
+    this.lives-- // Remove a life
+    if (this.lives === -1) {
+      dispatcher(this.canvas, EVENTS.GAME_OVER)
+    } else {
+      this.startLevel()
+    }
+  }
+
+  levelCompleteHandler() {
+    this.currentLevel++
+    if (this.currentLevel === map.levels.length) {
+      // YOU WIN!
+    } else {
+      // Next Level
+      this.startLevel()
+    }
+  }
+
   updateHUD() {
     if(!this.HUDisSet) this.setupHUD();
     const { battery, currentLevel, lives, powerups } = this.views
-   
+
     currentLevel.innerHTML = `Level: ${this.currentLevel + 1}`
 
     // TODO: Implement lives system
