@@ -42,6 +42,12 @@ body h1{
   font-size: 18px;
 }
 
+
+#retryScreen .screen-content{
+  margin-bottom: 10%;
+  font-size: 40px;
+}
+
 .screen-game-cta{
   font-size: 14px;
   padding: 7px 5px;
@@ -49,18 +55,37 @@ body h1{
   background-color: #d3d3d3;
   color: #000;
   width: 200px;
-  transition: all 0.3;
+  transition: all 0.3s;
   margin:25px auto;
   font-size: 20px;
   display: inline-block;
+}
+
+/*Animate buttons in*/
+.cta-container{
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+  transition-delay: 2s;
+}
+
+.screen-state.is-active .cta-container{
+  opacity: 1;
 }
 
 .screen-game-cta:hover{
   background-color: yellow;
 }
 
+.screen-game-cta.negative:hover{
+  background-color: #f00;
+}
+
 .screen-game-cta:active{
   background-color: #0f0;
+}
+
+.screen-game-cta.negative:active{
+  background-color: yellow;
 }
 
 
