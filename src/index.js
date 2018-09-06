@@ -3,6 +3,8 @@ import Engine from './engine'
 import { EVENTS } from './constants'
 import audio from './audio'
 
+const retryParam = 'skipstart=t'
+
 
 const game = {
   start() {
@@ -22,12 +24,19 @@ const game = {
     this.canvas.removeEventListener(EVENTS.GAME_OVER, this._gameFailSequence);
     audio.die()
     this.engine.stop();
-    // TODO - Display Retry Screen
-    setTimeout(() => window.location.reload(), 3000);
-  },
-  frame() {
-    this.engine.start()
-    this.engine.stop()
+
+    closeCurrentScreen();
+    const retryBtn = document.getElementById('retryBtn')
+    const exitBtn = document.getElementById('exitBtn')
+    retryBtn.addEventListener('click', () => {
+      if(urlHasRetry()) window.location.reload()
+      else window.location.href += `?${retryParam}`
+    })
+    exitBtn.addEventListener('click', () => {
+      window.location.href = `${window.location.origin}${window.location.pathname}`
+    })
+    const retryScreen = document.getElementById('retryScreen')
+    retryScreen.classList.add('is-active');
   }
 }
 
@@ -37,18 +46,23 @@ const game = {
 
 // Screen initializers
 function initStartScreen(){
-  // return game.start() // DEBUG
+  if(urlHasRetry()) return game.start();
 
   const ss = document.getElementById('startScreen')
   ss.classList.add('is-active');
-  ss.querySelector('.start-game-cta').addEventListener('click', () => {
+  ss.querySelector('#playBtn').addEventListener('click', () => {
     closeCurrentScreen();
     game.start();
   })
 }
 
 function closeCurrentScreen() {
-  document.querySelector('.screen-state.is-active').classList.remove('is-active')
+  const currentScreen = document.querySelector('.screen-state.is-active')
+  if(currentScreen) currentScreen.classList.remove('is-active')
+}
+
+function urlHasRetry() {
+  return window.location.search.includes(retryParam)
 }
 
 

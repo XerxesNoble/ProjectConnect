@@ -24,6 +24,7 @@ body h1{
 }
 
 .screen-state{
+  padding-top:10%;
   display:none;
   width: 100%;
   height: 100%;
@@ -36,10 +37,34 @@ body h1{
   display: block;
   z-index:2;
 }
+.screen-content{
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.screen-game-cta{
+  font-size: 14px;
+  padding: 7px 5px;
+  border-radius: 5px;
+  background-color: #d3d3d3;
+  color: #000;
+  width: 200px;
+  transition: all 0.3;
+  margin:25px auto;
+  font-size: 20px;
+  display: inline-block;
+}
+
+.screen-game-cta:hover{
+  background-color: yellow;
+}
+
+.screen-game-cta:active{
+  background-color: #0f0;
+}
 
 
 /*Start screen*/
-#startScreen{ padding-top:10%; }
 .dope-logo{
   font-family: sans-serif impact;
   font-size: 30px;
@@ -51,33 +76,9 @@ body h1{
   display: inline-block;
 }
 
-.back-story{
-  margin-bottom: 10px;
-  font-size: 18px;
-}
 .controls-tut{
   color: yellow;
   padding-bottom: 8px;
-}
-
-.start-game-cta{
-  font-size: 14px;
-  padding: 7px 5px;
-  border-radius: 5px;
-  background-color: #d3d3d3;
-  color: #000;
-  width: 200px;
-  transition: all 0.3;
-  margin:25px auto;
-  font-size: 20px;
-}
-
-.start-game-cta:hover{
-  background-color: yellow;
-}
-
-.start-game-cta:active{
-  background-color: #0f0;
 }
 
 /* HUD */

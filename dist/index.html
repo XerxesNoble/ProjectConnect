@@ -36,16 +36,22 @@
         <img src="assets/wifi.svg" />
         <p>WHERE'S THE INTERNET?</p>
       </div>
-      <div class="back-story">
+      <div class="screen-content">
         <p>Oh noes! Someone tooks the internets!</p>
         <p>Get it back plz!</p>
       </div>
-      <div class="start-game-cta">PLAY!</div>
+      <div id="playBtn" class="screen-game-cta">PLAY!</div>
       <div class="controls-tut">◅ ▻ Arrows to move, space bar to jump.</div>
       <div class="controls-tut">Collect wifi for additional bonuses!</div>
     </div>
     <!-- Game over screen -->
-    <div id="retryScreen" class="screen-state"></div>
+    <div id="retryScreen" class="screen-state">
+      <div class="screen-content">
+        Well... that sucks...
+      </div>
+      <div id="retryBtn" class="screen-game-cta">Try again?</div>
+      <div id="exitBtn" class="screen-game-cta">Forget that</div>
+    </div>
     <!-- Level complete screen -->
     <div id="completeScreen" class="screen-state"></div>
     <script type="text/javascript" src="bundle.js"></script>
