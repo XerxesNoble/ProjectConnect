@@ -5,12 +5,13 @@ import ShadowGenerator from '../utils/ShadowGenerator'
 const map = (canvas, context, levelIndex = 1) => {
   const currentLevel = levels[levelIndex];
   // Object factories
-  const { player, obstacle, deadzone, batteryPack, enemy, door } = gameObjects(context)
+  const { player, obstacle, deadzone, batteryPack, enemy, door, goal } = gameObjects(context)
   // Collections for map
   const obstacles = []
   const monsters = []
   const powerups = []
   let end
+  let objective
   let totalPowerups = 0
   const spriteSize = context._spriteSize
   const size = Math.floor(canvas.height / currentLevel.length)
@@ -39,7 +40,10 @@ const map = (canvas, context, levelIndex = 1) => {
           totalPowerups++
           break
         case '$':
-          end = door(x, y, spriteSize, spriteSize)
+          end = door(x, y, spriteSize * 2, spriteSize * 2)
+          break
+        case 'O':
+          objective = goal(x, y, spriteSize * 2, spriteSize * 2)
           break
         case 'P':
           player.x = x
@@ -72,6 +76,7 @@ const map = (canvas, context, levelIndex = 1) => {
     monsters,
     powerups,
     player,
+    objective,
     end,
     totalPowerups,
     shadowGenerator,
