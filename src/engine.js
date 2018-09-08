@@ -115,20 +115,21 @@ export default class Engine {
   }
 
   loop() {
-    const { player, obstacles, powerups, monsters } = this.game
+    const { player, obstacles, powerups, monsters, shadowGenerator } = this.game
 
     if (this.run === false) return
     this.updateHUD()
     // Clear drawing
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
-    // Draw background
-    this.context.globalAlpha = 1
-    this.context.fillStyle = `#000000`
-    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
-    this.context.globalAlpha = player.getBatteryLife()
-    this.context.fillStyle = `#121212`
-    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
+    // Draw Shadow
+    const vision = 800 * player.getBatteryLife()
+    const shadow = shadowGenerator.getVisibilityPolygons(
+      player.x + player.width / 2,
+      player.y + player.height / 2,
+      vision
+    )
+    shadow.drawShadow()
 
     // Update player from controls
     if (controls.jump && (!player.jump && player.grnd)) {
