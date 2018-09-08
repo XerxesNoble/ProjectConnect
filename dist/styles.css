@@ -12,7 +12,7 @@
   padding: 0;
   position: absolute;
   left:0;
-  background: #212121;
+  background: radial-gradient(lightblue, black);
 }
 
 body h1{
@@ -162,7 +162,3 @@ body h1{
   height:25px;
   display: inline-block;
 }
-
-
-
-

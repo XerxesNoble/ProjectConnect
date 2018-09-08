@@ -1,11 +1,11 @@
 import gameObjects from '../gameObjects'
 import levels from './levels'
+import ShadowGenerator from '../utils/ShadowGenerator'
 
 const map = (canvas, context, levelIndex = 1) => {
   const currentLevel = levels[levelIndex];
   // Object factories
   const { player, obstacle, deadzone, batteryPack, enemy, door } = gameObjects(context)
-
   // Collections for map
   const obstacles = []
   const monsters = []
@@ -16,11 +16,20 @@ const map = (canvas, context, levelIndex = 1) => {
   const size = Math.floor(canvas.height / currentLevel.length)
   currentLevel.forEach((row, i) => {
     const y = i * size
-    row.split('').forEach((block, j) => {
+    let obstacleSize = 0
+    row.split('').forEach((block, j, array) => {
       const x = j * size
+
+      // Join all blocks into individual shapes
+      if ((block !== '*' || !array[j + 1]) && obstacleSize > 0) {
+        const width = size * obstacleSize
+        obstacles.push(obstacle(x - width, y, width, spriteSize))
+        obstacleSize = 0
+      }
+
       switch (block) {
         case '*':
-          obstacles.push(obstacle(x, y, size, spriteSize))
+          obstacleSize++
           break
         case '%':
           monsters.push(enemy(x, y, spriteSize, spriteSize))
@@ -45,10 +54,18 @@ const map = (canvas, context, levelIndex = 1) => {
 
   // Add deadzone
   // Add 5 units of buffer at the end of the game and at the start of the game
-  for(let i = -5; i < currentLevel[levelIndex].length + 5; i ++) {
-    obstacles.push(deadzone(i * size, canvas.height + 50, size, 1))
+  const dzBounds = {
+    x: -(size * 5),
+    y: canvas.height + 50,
+    width: size *  currentLevel[levelIndex].length + 5,
+    height: 1
   }
 
+  obstacles.push(deadzone(dzBounds.x, dzBounds.y, dzBounds.width, dzBounds.height))
+
+  // All obstacles + canvas
+  const bounds = ShadowGenerator.Rect(0, 0, canvas.width, canvas.height, false)
+  const shadowGenerator = new ShadowGenerator(obstacles, bounds, context)
 
   return {
     obstacles,
@@ -57,6 +74,7 @@ const map = (canvas, context, levelIndex = 1) => {
     player,
     end,
     totalPowerups,
+    shadowGenerator,
     collectedPowerups: 0,
   }
 }

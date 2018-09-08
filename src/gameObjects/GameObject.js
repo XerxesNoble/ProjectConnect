@@ -14,9 +14,26 @@ export default class GameObject {
     return checkCollision(player, this)
   }
 
-  draw() {
-    this.context.fillStyle = this.fill
+  inBounds(b) {
+    const bounds = b || {
+      x: 0,
+      y: 0,
+      width: this.context.canvas.width,
+      height: this.context.canvas.height
+    }
+    return !(
+      ((this.y + this.height) < (bounds.y)) ||
+      (this.y > (bounds.y + bounds.height)) ||
+      ((this.x + this.width) < bounds.x) ||
+      (this.x > (bounds.x + bounds.width))
+    )
+  }
+
+  draw(render = true) {
     this.x -= this.speed || 1
-    this.context.fillRect(this.x, this.y, this.width, this.height)
+    if (render && this.inBounds()) {
+      this.context.fillStyle = this.fill
+      this.context.fillRect(this.x, this.y, this.width, this.height)
+    }
   }
 }
