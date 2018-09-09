@@ -1,13 +1,13 @@
 import controls from './controls'
 import map from './map'
 import audio from './audio'
-import { EVENTS, BATTERY_STATES } from './constants'
+import { EVENTS, BATTERY_STATES, GAME_LIVES } from './constants'
 import dispatcher from './utils/dispatcher'
 
 export default class Engine {
   constructor(context, hud) {
     this.hud = hud
-    this.lives = 3 // Game constant?
+    this.lives = GAME_LIVES
     this.views = {
       battery: {
         container: document.getElementById('battery'),
@@ -26,6 +26,8 @@ export default class Engine {
     // When player reaches goal, Go to next map
     this.canvas.addEventListener(EVENTS.LEVEL_COMPLETE, this.levelCompleteHandler.bind(this))
     this.canvas.addEventListener(EVENTS.LEVEL_FAIL, this.livesHandler.bind(this))
+    this.canvas.addEventListener(EVENTS.GAME_STATE_PAUSE, this.stop.bind(this))
+    this.canvas.addEventListener(EVENTS.GAME_STATE_PLAY, this.start.bind(this))
 
     this.friction = 0.8
     this.jumpHeight = this.context._spriteSize / 10 // 2.5 (non-retina)
@@ -115,9 +117,9 @@ export default class Engine {
   }
 
   loop() {
+    if (this.run === false) return
     const { player, obstacles, powerups, monsters, shadowGenerator } = this.game
 
-    if (this.run === false) return
     this.updateHUD()
     // Clear drawing
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
