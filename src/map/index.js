@@ -57,7 +57,7 @@ const map = (canvas, context, levelIndex = 1) => {
   const dzBounds = {
     x: -(size * 5),
     y: canvas.height + 50,
-    width: size *  currentLevel[levelIndex].length + 5,
+    width: size * (currentLevel[levelIndex].length + 20),
     height: 1
   }
 

@@ -9,13 +9,13 @@ function getControls() {
     right: false,
     left: false
   }
-  const setControl = flag => {
+  const setControl = (keyCode, flag) => {
     Object.keys(controls).forEach(control => {
-      if (keys[control].indexOf(event.keyCode) > -1) controls[control] = flag
+      if (keys[control].indexOf(keyCode) > -1) controls[control] = flag
     })
   }
-  document.body.addEventListener('keydown', event => setControl(true))
-  document.body.addEventListener('keyup', event => setControl(false))
+  document.body.addEventListener('keydown', event => setControl(event.keyCode, true))
+  document.body.addEventListener('keyup', event => setControl(event.keyCode, false))
   return controls
 }
 
