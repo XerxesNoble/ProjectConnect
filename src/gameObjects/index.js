@@ -11,11 +11,9 @@ function reduceBatteryLife(player) {
     if (player.batteryLife > reducedValue) requestAnimationFrame(frame)
   }
   frame()
-  // TODO: Trigger update of Battery HUD here.
-  // TODO: Listen for battery pickup event to stall reduction
 }
 
-export default context => ({
+export default (context, assets) => ({
   player: {
     x: 0,
     y: 0,
@@ -70,28 +68,28 @@ export default context => ({
   },
   batteryPack(x, y, width, height) {
     const fill = null
-    const url = 'assets/battery-pickup.svg'
-    const bp = new GameObject({ x, y, width, height, fill, context, url })
+    const asset = assets['battery-pickup']
+    const bp = new GameObject({ x, y, width, height, fill, context, asset })
     bp.collected = false
     bp.power = 0.3
     return bp
   },
   enemy(x, y, width, height) {
     const fill = null
-    const url = 'assets/robot.svg'
-    const enemy = new GameObject({ x, y, width, height, fill, context, url })
+    const asset = assets['robot']
+    const enemy = new GameObject({ x, y, width, height, fill, context, asset })
     enemy.origin = { x, y }
     enemy.speed = Math.random() * 5
     return enemy
   },
   door(x, y, width, height) {
     const fill = null
-    const url = 'assets/ethernet-port.svg'
-    return new GameObject({ x, y, width, height, fill, context, url })
+    const asset = assets['ethernet-port']
+    return new GameObject({ x, y, width, height, fill, context, asset })
   },
   goal(x, y, width, height) {
     const fill = null
-    const url = 'assets/ethernet.svg'
-    return new GameObject({ x, y, width, height, fill, context, url })
+    const asset = assets['ethernet']
+    return new GameObject({ x, y, width, height, fill, context, asset })
   }
 })
