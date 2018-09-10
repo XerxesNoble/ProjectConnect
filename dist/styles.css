@@ -44,8 +44,13 @@ body h1{
 
 
 #retryScreen .screen-content{
-  margin-bottom: 10%;
+  margin-bottom: 2%;
   font-size: 40px;
+}
+
+.retry-icon{
+  padding-top: 60px;
+  height:100px;
 }
 
 .screen-game-cta{

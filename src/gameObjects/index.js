@@ -69,21 +69,29 @@ export default context => ({
     return dz
   },
   batteryPack(x, y, width, height) {
-    const fill = '#388E3C'
-    const bp = new GameObject({ x, y, width, height, fill, context })
+    const fill = null
+    const url = 'assets/battery-pickup.svg'
+    const bp = new GameObject({ x, y, width, height, fill, context, url })
     bp.collected = false
     bp.power = 0.3
     return bp
   },
   enemy(x, y, width, height) {
-    const fill = ['#D32F2F', '#F44336'][Math.floor(Math.random() * 2)]
-    const enemy = new GameObject({ x, y, width, height, fill, context })
+    const fill = null
+    const url = 'assets/robot.svg'
+    const enemy = new GameObject({ x, y, width, height, fill, context, url })
     enemy.origin = { x, y }
     enemy.speed = Math.random() * 5
     return enemy
   },
   door(x, y, width, height) {
-    const fill = 'purple'
-    return new GameObject({ x, y, width, height, fill, context })
+    const fill = null
+    const url = 'assets/ethernet-port.svg'
+    return new GameObject({ x, y, width, height, fill, context, url })
+  },
+  goal(x, y, width, height) {
+    const fill = null
+    const url = 'assets/ethernet.svg'
+    return new GameObject({ x, y, width, height, fill, context, url })
   }
 })

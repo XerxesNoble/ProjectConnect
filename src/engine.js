@@ -208,12 +208,28 @@ export default class Engine {
       else enemy.draw()
     })
 
+    // Player reached objective
+    if (this.game.objective) {
+      if(this.game.objective.collides(player)[0]) {
+        player.hasObjective = true
+          audio.win()
+      } else if(!player.hasObjective) {
+        this.game.objective.draw()
+      }
+    }
+
 
     // Player has reached end
     if (this.game.end.collides(player)[0]) {
-      audio.win()
-      // TODO - Trigger game end animation
-      dispatcher(this.canvas, EVENTS.LEVEL_COMPLETE)
+      if(player.hasObjective) {
+        player.hasObjective = false
+        audio.win()
+        // TODO - Trigger game end animation
+        dispatcher(this.canvas, EVENTS.LEVEL_COMPLETE)
+      } else {
+        // TODO - Create error sound
+        // play error sound
+      }
     } else {
       this.game.end.draw()
     }
