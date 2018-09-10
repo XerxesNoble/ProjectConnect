@@ -23,15 +23,16 @@ export default {
     this.play([25])
   },
   win() {
-    [440, 200].forEach(hz => this.play([25,20,15], 0.1, hz))
+    this.harmony.forEach(hz => this.play([25,20,15], 0.1, hz))
   },
   powerup() {
-    [440, 200].forEach(hz => this.play([13,12,11,10], 0.08, hz))
+    this.harmony.forEach(hz => this.play([13,12,11,10], 0.08, hz))
   },
   die() {
-    [440, 200].forEach(hz => this.play([6,10,12,10], 0.1, hz))
+    this.harmony.forEach(hz => this.play([6,10,12,10], 0.1, hz))
   },
   fail() {
-    [440, 200].forEach(hz => this.play([13,14,15,,16,17,18,,19,20,21], 0.2, hz))
+    this.harmony.forEach(hz => this.play([13,14,15,,16,17,18,,19,20,21], 0.2, hz))
   }
+  harmony:[440, 200],
 }
