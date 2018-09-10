@@ -203,19 +203,9 @@ export default class Engine {
     this.game.monsters.forEach(enemy => {
       const [direction] = enemy.collides(player)
       if (direction) dispatcher(this.canvas, EVENTS.LEVEL_FAIL) // TODO: Ability to kill enemy?
-      // Test if enemy is outside of game view
-      const [inView] = enemy.collides({
-        x: 0,
-        y:0,
-        width: this.canvas.width,
-        height: this.canvas.height
-      })
-      // If outside of view, reset position
-      if (!inView) {
-        enemy.x = enemy.origin.x
-        enemy.y = enemy.origin.y
-      }
-      enemy.draw()
+      // If enemy has not yet come into view
+      if (enemy.x < 0) enemy.x = enemy.origin.x - this.game.distanceTravelled
+      else enemy.draw()
     })
 
 
@@ -228,6 +218,7 @@ export default class Engine {
       this.game.end.draw()
     }
 
+    this.game.distanceTravelled++
     requestAnimationFrame(this.loop.bind(this))
   }
 

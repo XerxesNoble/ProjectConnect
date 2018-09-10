@@ -29,7 +29,7 @@ export default {
     [440, 200].forEach(hz => this.play([13,12,11,10], 0.08, hz))
   },
   die() {
-    [440, 200].forEach(hz => this.play([6,10,12,10], 0.1, hz))
+    [440, 200].forEach(hz => this.play([6,10,12,14], 0.1, hz))
   },
   fail() {
     [440, 200].forEach(hz => this.play([13,14,15,,16,17,18,,19,20,21], 0.2, hz))
