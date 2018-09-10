@@ -5,7 +5,8 @@ import { EVENTS, BATTERY_STATES, GAME_LIVES } from './constants'
 import dispatcher from './utils/dispatcher'
 
 export default class Engine {
-  constructor(context, hud) {
+  constructor(context, hud, assets) {
+    this.assets = assets
     this.hud = hud
     this.lives = GAME_LIVES
     this.views = {
@@ -39,7 +40,7 @@ export default class Engine {
   startLevel() {
     // Level Generation, get all objects that will be in the game
     // obstacles, monsters, powerps, player, end
-    this.game = {...(map(this.canvas, this.context, this.currentLevel))}
+    this.game = {...(map(this.canvas, this.context, this.assets, this.currentLevel))}
   }
 
   start() {
@@ -219,9 +220,9 @@ export default class Engine {
 
     // Player reached objective
     if (this.game.objective) {
-      if(this.game.objective.collides(player)[0]) {
+      if(!player.hasObjective && this.game.objective.collides(player)[0]) {
         player.hasObjective = true
-          audio.win()
+        audio.win()
       } else if(!player.hasObjective) {
         this.game.objective.draw()
       }

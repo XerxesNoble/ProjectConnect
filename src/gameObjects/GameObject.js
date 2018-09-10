@@ -1,17 +1,14 @@
 import { checkCollision } from '../utils/collision'
 
 export default class GameObject {
-  constructor({x, y, width, height, fill, context, url}) {
+  constructor({x, y, width, height, fill, context, asset}) {
     this.x = x
     this.y = y
     this.width = width
     this.height = height
     this.fill = fill
-    this.url = url
     this.context = context
-    if(url) this.loadImage(url).then((img) => {
-      this.img = img
-    })
+    this.img = asset
   }
 
   collides(player) {
@@ -43,16 +40,6 @@ export default class GameObject {
         this.context.fillRect(this.x, this.y, this.width, this.height)
       }
     }
-  }
-
-  loadImage(url) {
-    return new Promise((resolve) => {
-      var img = new Image()   // Create new img element
-      img.addEventListener('load', function() {
-        resolve(img)
-      }, false)
-      img.src = url // Set source path
-    })
   }
 
 }

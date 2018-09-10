@@ -11,7 +11,8 @@ const game = {
     this.context = initStage('#gameStage')
     this.canvas = this.context.canvas
     const hud = document.getElementById('hud')
-    this.engine = new Engine(this.context, hud)
+    const assets = this.getAssets()
+    this.engine = new Engine(this.context, hud, assets)
 
     // Add Events
     this._gameFailSequence = this.gameFailSequence.bind(this)
@@ -19,6 +20,19 @@ const game = {
 
     // Start game loop
     this.engine.start()
+  },
+  getAssets() {
+    return [
+      'battery-pickup',
+      'ethernet-port2',
+      'ethernet-port',
+      'ethernet',
+      'nowifi',
+      'robot',
+    ].reduce((obj, assetName) => {
+      obj[assetName] = document.getElementById(assetName)
+      return obj
+    }, {})
   },
   gameFailSequence() {
     this.canvas.removeEventListener(EVENTS.GAME_OVER, this._gameFailSequence);
