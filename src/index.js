@@ -22,7 +22,7 @@ const game = {
   },
   gameFailSequence() {
     this.canvas.removeEventListener(EVENTS.GAME_OVER, this._gameFailSequence);
-    audio.die()
+    audio.fail()
     this.engine.stop();
 
     closeCurrentScreen();

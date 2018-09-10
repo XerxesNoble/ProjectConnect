@@ -33,8 +33,8 @@ export default class GameObject {
     )
   }
 
-  draw(render = true) {
-    this.x -= this.speed || 1
+  draw(render = true, move = true) {
+    if (move) this.x -= this.speed || 1
     if (render && this.inBounds()) {
       if(this.img) {
         this.context.drawImage(this.img, this.x, this.y, this.width, this.height)
