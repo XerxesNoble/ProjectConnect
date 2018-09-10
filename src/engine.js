@@ -1,7 +1,7 @@
 import controls from './controls'
 import map from './map'
 import audio from './audio'
-import { EVENTS, BATTERY_STATES, GAME_LIVES } from './constants'
+import { EVENTS, BATTERY_STATES, GAME_LIVES, MAX_VISION } from './constants'
 import dispatcher from './utils/dispatcher'
 
 export default class Engine {
@@ -73,6 +73,7 @@ export default class Engine {
     if (this.lives === -1) {
       dispatcher(this.canvas, EVENTS.GAME_OVER)
     } else {
+      audio.die()
       this.startLevel()
     }
   }
@@ -124,15 +125,6 @@ export default class Engine {
     // Clear drawing
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
-    // Draw Shadow
-    const vision = 800 * player.getBatteryLife()
-    const shadow = shadowGenerator.getVisibilityPolygons(
-      player.x + player.width / 2,
-      player.y + player.height / 2,
-      vision
-    )
-    shadow.drawShadow()
-
     // Update player from controls
     if (controls.jump && (!player.jump && player.grnd)) {
       player.jump = true
@@ -171,6 +163,15 @@ export default class Engine {
         dispatcher(this.canvas, EVENTS.LEVEL_FAIL)
       }
     })
+
+    // Draw Shadow
+    const vision = MAX_VISION * player.getBatteryLife()
+    const shadow = shadowGenerator.getVisibilityPolygons(
+      player.x + player.width / 2,
+      player.y + player.height / 2,
+      vision
+    )
+    shadow.drawShadow()
 
     // Apply player v to position
     if (player.grnd) player.v.y = 0

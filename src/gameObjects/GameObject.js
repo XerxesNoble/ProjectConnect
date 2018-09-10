@@ -29,8 +29,8 @@ export default class GameObject {
     )
   }
 
-  draw(render = true) {
-    this.x -= this.speed || 1
+  draw(render = true, move = true) {
+    if (move) this.x -= this.speed || 1
     if (render && this.inBounds()) {
       this.context.fillStyle = this.fill
       this.context.fillRect(this.x, this.y, this.width, this.height)

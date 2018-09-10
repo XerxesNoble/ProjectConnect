@@ -17,7 +17,7 @@ export default class ShadowGenerator {
     // Filter list of all relevant obstacles
     const shadowObjects = this.rects.reduce((acc, rect) => {
       if (rect.inBounds(this.bounds)) {
-        acc.push(ShadowGenerator.Rect(rect.x, rect.y, rect.width, rect.height))
+        acc.push(ShadowGenerator.Rect(rect.x, rect.y, rect.width, rect.height, rect))
       }
       return acc
     }, [])
@@ -38,11 +38,10 @@ export default class ShadowGenerator {
       [px, py + 10],
       [px, py - 10],
       [px, py],
-    ].map(o => this.getVisibilityPolygon(rects, segments, ...o))
+    ].map(origin => this.getVisibilityPolygon(rects, segments, origin[0], origin[1]))
 
     return {
       polys,
-      draw: () => polys.forEach(poly => this.drawPolygon(poly)),
       drawShadow: () => {
         this.context.save()
 
@@ -57,6 +56,7 @@ export default class ShadowGenerator {
         this.context.closePath()
         this.context.clip()
 
+
         // Add Vision Gradiant
         const radial = vision / 3
         const gradient = this.context.createRadialGradient(px, py, radial, px, py, vision/2)
@@ -70,27 +70,35 @@ export default class ShadowGenerator {
         // Clip visibility polygons
         polys.forEach(poly => this.drawPolygon(poly))
 
+        // Draw bounds rects
+        this.context.globalCompositeOperation = 'source-over'
+        rects.forEach(r => r.rect && r.rect.draw(true, false))
+
         this.context.restore()
       },
     }
   }
 
   getAngles(rects, px, py) {
-    return Array.from(rects.reduce((acc, rect) => {
+    const angleMap = {}
+    const angles = []
+    rects.forEach(rect => {
       rect.corners.forEach(corner => {
-        const a = this.angle(corner, [px, py])
-        acc.add(a - 0.00001)
-        acc.add(a)
-        acc.add(a + 0.00001)
+        const a = this.angle(corner[0], corner[1], px, py)
+        if (!angleMap[a]) {
+          angleMap[a] = true
+          angles.push(a - 0.00001, a, a + 0.00001)
+        }
       })
-      return acc
-    }, new Set()))
+    })
+    return angles
   }
 
   getClosestIntersections(segments, angles, px, py) {
+    const start = [px, py]
     return angles.reduce((list, angle) => {
       const ray = [
-        [px, py],
+        start,
         [px + Math.cos(angle), py + Math.sin(angle)],
       ]
 
@@ -105,48 +113,47 @@ export default class ShadowGenerator {
         list.push(closestIntersect)
       }
       return list
-    }, [])
+    }, []).sort((a, b) => a.angle - b.angle)
   }
 
   getVisibilityPolygon(rects, segments, px, py) {
     const angles = this.getAngles(rects, px, py)
-    const intersects = this.getClosestIntersections(segments, angles, px, py)
-    return intersects.sort((a, b) => a.angle - b.angle)
+    return this.getClosestIntersections(segments, angles, px, py)
   }
   // Ray cast, thanks to: https://ncase.me/sight-and-light/
-  getIntersection(r,s) {
+  getIntersection(r, s) {
     // RAY in parametric: Point + Delta*T1
     const r_px = r[0][0]
     const r_py = r[0][1]
-    const r_dx = r[1][0]-r[0][0]
-    const r_dy = r[1][1]-r[0][1]
+    const r_dx = r[1][0] - r_px
+    const r_dy = r[1][1] - r_py
     // SEGMENT in parametric: Point + Delta*T2
     const s_px = s[0][0]
     const s_py = s[0][1]
-    const s_dx = s[1][0]-s[0][0]
-    const s_dy = s[1][1]-s[0][1]
+    const s_dx = s[1][0] - s_px
+    const s_dy = s[1][1] - s_py
     // Are they parallel? If so, no intersect
-    const r_mag = Math.sqrt(r_dx*r_dx+r_dy*r_dy)
-    const s_mag = Math.sqrt(s_dx*s_dx+s_dy*s_dy)
-    if(r_dx/r_mag==s_dx/s_mag && r_dy/r_mag==s_dy/s_mag){
+    const r_mag = Math.sqrt(r_dx * r_dx + r_dy * r_dy)
+    const s_mag = Math.sqrt(s_dx * s_dx + s_dy * s_dy)
+    if(r_dx / r_mag == s_dx / s_mag && r_dy / r_mag == s_dy / s_mag){
       // Unit vectors are the same.
       return null
     }
-    const T2 = (r_dx*(s_py-r_py) + r_dy*(r_px-s_px))/(s_dx*r_dy - s_dy*r_dx)
-    const T1 = (s_px+s_dx*T2-r_px)/r_dx
+    const T2 = (r_dx * (s_py-r_py)  +  r_dy * (r_px-s_px)) / (s_dx * r_dy - s_dy * r_dx)
+    const T1 = (s_px + s_dx * T2 - r_px) / r_dx
     // Must be within parametic whatevers for RAY/SEGMENT
-    if(T1<0) return null
-    if(T2<0 || T2>1) return null
+    if(T1 < 0) return null
+    if(T2 < 0 || T2 > 1) return null
     // Return the POINT OF INTERSECTION
     return {
-      point: [r_px+r_dx*T1, r_py+r_dy*T1],
+      point: [r_px + r_dx * T1, r_py + r_dy * T1],
       param: T1
     }
   }
 
   // Angle (in radians) between two points
-  angle(a, b) {
-    return Math.atan2(a[1] - b[1], a[0] - b[0])
+  angle(ax, ay, bx, by) {
+    return Math.atan2(ay - by, ax - bx)
   }
 
   drawPolygon(poly) {
@@ -159,7 +166,7 @@ export default class ShadowGenerator {
     this.context.fill()
   }
 
-  static Rect(x, y, w, h, draw) {
+  static Rect(x, y, w, h, rect) {
     const corners = [
         [x, y],
         [x + w, y],
@@ -170,7 +177,7 @@ export default class ShadowGenerator {
       shape: [x, y, w, h],
       corners,
       segments: corners.map((c, i, l) => ([c, l[i + 1] || l[0]])),
-      draw
+      rect,
     }
   }
 }
