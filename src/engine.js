@@ -83,7 +83,7 @@ export default class Engine {
     this.currentLevel++
     if (this.currentLevel === map.levels.length) {
       // YOU WIN!
-      dispatcher(this.canvas, EVENTS.GAME_WIN)
+
     } else {
       // Next Level
       this.startLevel()
@@ -228,7 +228,7 @@ export default class Engine {
         player.hasObjective = false
         audio.win()
         // TODO - Trigger game end animation
-        return dispatcher(this.canvas, EVENTS.LEVEL_COMPLETE)
+        dispatcher(this.canvas, EVENTS.LEVEL_COMPLETE)
       } else {
         // TODO - Create error sound
         // play error sound
