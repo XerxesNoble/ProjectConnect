@@ -29,10 +29,10 @@ export default {
     this.harmony.forEach(hz => this.play([13,12,11,10], 0.08, hz))
   },
   die() {
-    this.harmony.forEach(hz => this.play([6,10,12,10], 0.1, hz))
+    this.harmony.forEach(hz => this.play([6,10,12,14], 0.1, hz))
   },
   fail() {
     this.harmony.forEach(hz => this.play([13,14,15,,16,17,18,,19,20,21], 0.2, hz))
-  }
+  },
   harmony:[440, 200],
 }
