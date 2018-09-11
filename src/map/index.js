@@ -2,7 +2,7 @@ import gameObjects from '../gameObjects'
 import levels from './levels'
 import ShadowGenerator from '../utils/ShadowGenerator'
 
-const map = (canvas, context, levelIndex = 0) => {
+const map = (canvas, context, assets, levelIndex = 0) => {
   const currentLevel = levels[levelIndex];
   // Object factories
   const { player, obstacle, deadzone, batteryPack, enemy, door, goal } = gameObjects(context, assets)
