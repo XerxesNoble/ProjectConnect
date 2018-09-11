@@ -48,7 +48,8 @@ const map = (canvas, context, assets, levelIndex = 0) => {
         case 'P':
           player.x = x
           player.y = y
-          player.width = player.height = spriteSize
+          player.width = spriteSize * 2
+          player.height = spriteSize
           break
         default:
           void 0

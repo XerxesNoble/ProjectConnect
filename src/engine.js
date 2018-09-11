@@ -45,7 +45,7 @@ export default class Engine {
 
   start() {
     this.run = true
-    this.loop();
+    this.loop()
   }
 
   stop() {
@@ -83,6 +83,8 @@ export default class Engine {
     this.currentLevel++
     if (this.currentLevel === map.levels.length) {
       // YOU WIN!
+      // this.engine.stop();
+      dispatcher(this.canvas, EVENTS.GAME_WIN)
     } else {
       // Next Level
       this.startLevel()
@@ -90,7 +92,7 @@ export default class Engine {
   }
 
   updateHUD() {
-    if(!this.HUDisSet) this.setupHUD();
+    if(!this.HUDisSet) this.setupHUD()
     const { battery, currentLevel, lives, powerups } = this.views
 
     currentLevel.innerHTML = `Level: ${this.currentLevel + 1}`
@@ -225,8 +227,7 @@ export default class Engine {
       if(player.hasObjective) {
         player.hasObjective = false
         audio.win()
-        // TODO - Trigger game end animation
-        dispatcher(this.canvas, EVENTS.LEVEL_COMPLETE)
+        return dispatcher(this.canvas, EVENTS.LEVEL_COMPLETE)
       } else {
         // TODO - Create error sound
         // play error sound
