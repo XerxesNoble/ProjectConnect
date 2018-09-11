@@ -19,4 +19,11 @@ export default [
   'P        ****                                           ',
   '    ****                                         ###%  $',
   '***********                                 ************',
-];
+]
+
+// Legend:
+// P - player
+// $ - end
+// O - objective
+// % - enemy
+// # - battery
