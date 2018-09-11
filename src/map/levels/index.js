@@ -5,8 +5,8 @@ import levelFour from './level-4'
 import levelFive from './level-5'
 
 export default [
-  levelTwo,
   levelOne,
+  levelTwo,
   levelThree,
   levelFour,
   levelFive
