@@ -30,11 +30,9 @@ export default (context, assets) => ({
     batteryLife: 1,
     draw() {
       // Update player based on movement (TODO: use a sprite)
-      context.fillStyle = 'lightblue'
-      if (this.jump) context.fillStyle = 'orange'
-      // if (controls.right) context.fillStyle = 'red'
-      // if (controls.left) context.fillStyle = 'lightgreen'
-      context.fillRect(this.x, this.y, this.width, this.height)
+      // context.fillStyle = 'lightblue'
+      if (this.jump) context.drawImage(assets['player-jumping'], this.x, this.y, this.width * 2, this.height)
+      else context.drawImage(assets['player'], this.x, this.y, this.width * 2, this.height)
     },
     getBatteryLife() {
       if (!this._lastChecked) {

@@ -24,11 +24,12 @@ const game = {
   getAssets() {
     return [
       'battery-pickup',
-      'ethernet-port2',
       'ethernet-port',
       'ethernet',
       'nowifi',
       'robot',
+      'player',
+      'player-jumping',
     ].reduce((obj, assetName) => {
       obj[assetName] = document.getElementById(assetName)
       return obj
