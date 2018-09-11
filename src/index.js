@@ -57,14 +57,11 @@ const game = {
   },
 
   gameWinScreen() {
-    // this.engine.stop()
-    // this.canvas.removeEventListener(EVENTS.GAME_OVER, this._gameFailScreen);
+    this.engine.stop()
     audio.win()
-
-    closeCurrentScreen();
-
+    closeCurrentScreen()
     const winScreen = document.getElementById('completeScreen')
-    winScreen.classList.add('is-active');
+    winScreen.classList.add('is-active')
   }
 }
 

@@ -72,6 +72,7 @@ export default class Engine {
     this.canvas.removeEventListener(EVENTS.LEVEL_FAIL, this.livesHandler)
     this.lives-- // Remove a life
     if (this.lives === -1) {
+      // this.stop()
       dispatcher(this.canvas, EVENTS.GAME_OVER)
     } else {
       audio.die()
@@ -83,7 +84,6 @@ export default class Engine {
     this.currentLevel++
     if (this.currentLevel === map.levels.length) {
       // YOU WIN!
-      // this.engine.stop();
       dispatcher(this.canvas, EVENTS.GAME_WIN)
     } else {
       // Next Level
@@ -227,7 +227,7 @@ export default class Engine {
       if(player.hasObjective) {
         player.hasObjective = false
         audio.win()
-        return dispatcher(this.canvas, EVENTS.LEVEL_COMPLETE)
+        dispatcher(this.canvas, EVENTS.LEVEL_COMPLETE)
       } else {
         // TODO - Create error sound
         // play error sound
