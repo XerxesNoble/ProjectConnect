@@ -83,6 +83,7 @@ export default class Engine {
     this.currentLevel++
     if (this.currentLevel === map.levels.length) {
       // YOU WIN!
+      dispatcher(this.canvas, EVENTS.GAME_WIN)
     } else {
       // Next Level
       this.startLevel()
@@ -205,7 +206,8 @@ export default class Engine {
       const [direction] = enemy.collides(player)
       if (direction) dispatcher(this.canvas, EVENTS.LEVEL_FAIL) // TODO: Ability to kill enemy?
       // If enemy has not yet come into view
-      if (enemy.x < 0) enemy.x = enemy.origin.x - this.game.distanceTravelled
+      const resetPosition = enemy.origin.x - this.game.distanceTravelled
+      if (enemy.x < 0 && resetPosition > this.canvas.width) enemy.x = resetPosition
       else enemy.draw()
     })
 
@@ -226,7 +228,7 @@ export default class Engine {
         player.hasObjective = false
         audio.win()
         // TODO - Trigger game end animation
-        dispatcher(this.canvas, EVENTS.LEVEL_COMPLETE)
+        return dispatcher(this.canvas, EVENTS.LEVEL_COMPLETE)
       } else {
         // TODO - Create error sound
         // play error sound
