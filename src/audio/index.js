@@ -33,6 +33,6 @@ export default {
   },
   fail() {
     this.harmony.forEach(hz => this.play([13,14,15,,16,17,18,,19,20,21], 0.2, hz))
-  }
+  },
   harmony:[440, 200],
 }
