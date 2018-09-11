@@ -15,8 +15,10 @@ const game = {
     this.engine = new Engine(this.context, hud, assets)
 
     // Add Events
-    this._gameFailSequence = this.gameFailSequence.bind(this)
-    this.canvas.addEventListener(EVENTS.GAME_OVER, this._gameFailSequence)
+    this._gameFailScreen = this.gameFailScreen.bind(this)
+    this._gameWinScreen = this.gameWinScreen.bind(this)
+    this.canvas.addEventListener(EVENTS.GAME_OVER, this._gameFailScreen)
+    this.canvas.addEventListener(EVENTS.GAME_WIN, this._gameWinScreen)
 
     // Start game loop
     this.engine.start()
@@ -35,8 +37,8 @@ const game = {
       return obj
     }, {})
   },
-  gameFailSequence() {
-    this.canvas.removeEventListener(EVENTS.GAME_OVER, this._gameFailSequence);
+  gameFailScreen() {
+    this.canvas.removeEventListener(EVENTS.GAME_OVER, this._gameFailScreen);
     audio.fail()
     this.engine.stop();
 
@@ -52,6 +54,14 @@ const game = {
     })
     const retryScreen = document.getElementById('retryScreen')
     retryScreen.classList.add('is-active');
+  },
+
+  gameWinScreen() {
+    this.engine.stop()
+    audio.win()
+    closeCurrentScreen()
+    const winScreen = document.getElementById('completeScreen')
+    winScreen.classList.add('is-active')
   }
 }
 
