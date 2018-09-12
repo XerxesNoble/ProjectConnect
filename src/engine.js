@@ -180,7 +180,7 @@ export default class Engine {
     if (player.grnd) player.v.y = 0
     player.x += player.v.x
     player.y += player.v.y
-    player.draw()
+    player.draw(controls)
 
 
     // Test for collision with battery-packs and reset lighting
