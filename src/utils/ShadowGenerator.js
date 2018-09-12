@@ -60,7 +60,7 @@ export default class ShadowGenerator {
         // Add Vision Gradiant
         const radial = vision / 3
         const gradient = this.context.createRadialGradient(px, py, radial, px, py, vision/2)
-        gradient.addColorStop(0, 'rgba(0,0,0,0.8)')
+        gradient.addColorStop(0, 'rgba(0,0,0,0.4)')
         gradient.addColorStop(1, 'rgba(0,0,0,0)')
         this.context.globalCompositeOperation = 'destination-out'
         this.context.fillStyle = gradient
@@ -69,6 +69,14 @@ export default class ShadowGenerator {
 
         // Clip visibility polygons
         polys.forEach(poly => this.drawPolygon(poly))
+
+        this.context.globalCompositeOperation = 'source-over'
+        const gradient2 = this.context.createRadialGradient(px, py, radial, px, py, vision/2)
+        gradient2.addColorStop(1, 'rgba(0,0,0,0.4)')
+        gradient2.addColorStop(0, 'rgba(0,0,0,0)')
+        this.context.fillStyle = gradient2
+        this.context.arc(px, py, vision/2, 0 , 2 * Math.PI)
+        this.context.fill()
 
         // Draw bounds rects
         this.context.globalCompositeOperation = 'source-over'
