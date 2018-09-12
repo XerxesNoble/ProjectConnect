@@ -11,11 +11,11 @@ import levelNine from './level-9'
 import levelTen from './level-10'
 
 export default [
-  levelOne,
-  levelTwo,
-  levelThree,
-  levelFour,
-  levelFive,
+  // levelOne,
+  // levelTwo,
+  // levelThree,
+  // levelFour,
+  // levelFive,
   levelSix,
   levelSeven,
   levelEight,

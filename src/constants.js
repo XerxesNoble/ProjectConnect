@@ -11,7 +11,7 @@ export const EVENTS = {
 };
 
 export const BATTERY_LIFE = 30 * 1000 // seconds
-export const GAME_LIVES = 3
+export const GAME_LIVES = 10
 export const MAX_VISION = 600
 
 export const BATTERY_STATES = {
