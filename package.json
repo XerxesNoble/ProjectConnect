@@ -8,7 +8,7 @@
     "build": "webpack --mode production",
     "start": "webpack-dev-server --open --port 3000",
     "prezip": "npm run build;mkdir -p game;node compile;",
-    "zip": "zip game/game.zip game/index.html;",
+    "zip": "zip game/game.zip game/index.html;ls -la game/game.zip;",
     "predeploy": "npm run zip",
     "deploy": "gh-pages -d game"
   },

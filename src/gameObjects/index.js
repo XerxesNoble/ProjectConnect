@@ -40,8 +40,8 @@ export default (context, assets) => ({
         x = -(x + this.width)
       }
 
-      if (this.jump) context.drawImage(assets['player-jumping'], x, this.y, this.width, this.height)
-      else context.drawImage(assets['player'], x, this.y, this.width, this.height)
+      // if (this.jump) context.drawImage(assets['player-jumping'], x, this.y, this.width, this.height)
+      context.drawImage(assets['player'], x, this.y, this.width, this.height)
       context.restore()
     },
     getBatteryLife() {
