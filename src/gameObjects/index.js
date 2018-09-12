@@ -51,7 +51,7 @@ export default (context, assets) => ({
     }
   },
   obstacle(x, y, width, height) {
-    const fill = '#212121'
+    const fill = context.createPattern(assets['pattern-obstacle'], 'repeat')
     return new GameObject({ x, y, width, height, fill, context })
   },
   endSuccess(x, y, width, height) {

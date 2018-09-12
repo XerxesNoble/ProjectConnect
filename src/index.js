@@ -32,6 +32,7 @@ const game = {
       'robot',
       'player',
       'player-jumping',
+      'pattern-obstacle',
     ].reduce((obj, assetName) => {
       obj[assetName] = document.getElementById(assetName)
       return obj

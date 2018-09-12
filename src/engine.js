@@ -207,7 +207,8 @@ export default class Engine {
       const [direction] = enemy.collides(player)
       if (direction) dispatcher(this.canvas, EVENTS.LEVEL_FAIL) // TODO: Ability to kill enemy?
       // If enemy has not yet come into view
-      if (enemy.x < 0) enemy.x = enemy.origin.x - this.game.distanceTravelled
+      const resetPosition = enemy.origin.x - this.game.distanceTravelled
+      if (enemy.x < 0 && resetPosition > this.canvas.width) enemy.x = resetPosition
       else enemy.draw()
     })
 
