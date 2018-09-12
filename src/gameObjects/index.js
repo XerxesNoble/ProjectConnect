@@ -28,11 +28,21 @@ export default (context, assets) => ({
     jump: false,
     grnd: false,
     batteryLife: 1,
-    draw() {
-      // Update player based on movement (TODO: use a sprite)
-      // context.fillStyle = 'lightblue'
-      if (this.jump) context.drawImage(assets['player-jumping'], this.x, this.y, this.width, this.height)
-      else context.drawImage(assets['player'], this.x, this.y, this.width, this.height)
+    draw({ left, right }) {
+      context.save()
+      let x = this.x
+
+      // Flip car logic
+      if (right) this.heading = 'right'
+      else if (left || this.heading === 'left') {
+        this.heading = 'left'
+        context.scale(-1, 1)
+        x = -(x + this.width)
+      }
+
+      if (this.jump) context.drawImage(assets['player-jumping'], x, this.y, this.width, this.height)
+      else context.drawImage(assets['player'], x, this.y, this.width, this.height)
+      context.restore()
     },
     getBatteryLife() {
       if (!this._lastChecked) {
