@@ -18,7 +18,8 @@ const newHtml = htmlLines.map(line => {
         return `<style>${pd.cssmin(fs.readFileSync(file, 'utf8'))}</style>`
       break
       case '.svg':
-        return `<img id="${name}" src="data:image/svg+xml;utf8,${fs.readFileSync(file, 'utf8').split('"').join( "'")}" />`
+        const svg = encodeURIComponent(fs.readFileSync(file, 'utf8').split('"').join( "'"))
+        return `<img id="${name}" src="data:image/svg+xml;utf8,${svg}" />`
       break
     }
   }
