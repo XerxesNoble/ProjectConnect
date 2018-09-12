@@ -135,8 +135,8 @@ export default class Engine {
       player.v.y = -player.speed * this.jumpHeight // jump height
       audio.jump()
     }
-    if (controls.right && (player.v.x < player.hspeed)) player.v.x++
-    if (controls.left && (player.v.x > -player.hspeed)) player.v.x--
+    if (controls.right && (player.v.x < player.hspeed)) player.v.x += 1
+    if (controls.left && (player.v.x > -player.hspeed)) player.v.x -= 2 // Account for moving map
 
     // Apply environment settings
     player.v.x *= this.friction
@@ -180,7 +180,7 @@ export default class Engine {
     if (player.grnd) player.v.y = 0
     player.x += player.v.x
     player.y += player.v.y
-    player.draw()
+    player.draw(controls)
 
 
     // Test for collision with battery-packs and reset lighting
